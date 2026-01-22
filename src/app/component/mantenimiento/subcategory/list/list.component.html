@@ -1,0 +1,80 @@
+<div class="d-flex justify-content-between mb-2">
+  <div class="form-group" >
+    <input
+      type="text"
+      class="form-control"
+      [(ngModel)]="textSearch"
+      id="name"
+      placeholder="Buscar"
+    />
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table mb-0">
+    <thead class="table-light">
+      <tr>
+        <th>Sub Categoria</th>
+        <th>Tipo Subcategoria</th>
+        <th>Categoria</th>
+        <th>Path</th>
+        <th>Estado</th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="list?.content | filter : textSearch as result">
+        <tr *ngFor="let item of result | filter : textSearch; let i = index">
+          <td>{{ item.subcategory_name }}</td>
+          <td>
+            <span *ngIf="+item.type_sub_category === 1">Opciones del Menú Principal</span>
+            <span *ngIf="+item.type_sub_category === 2">Subcategorías por Sección del Sistema</span>
+          </td>
+          <td>{{ item.category_name }}</td>
+          <td><a>{{ item.path }}</a></td>
+          <td>
+            <button
+              *ngIf="+item.status === 0"
+              type="button"
+              class="btn d-flex btn-light-danger d-block text-danger font-medium"
+            >
+              Desabilitado
+            </button>
+            <button
+              type="button"
+              class="btn d-flex btn-light-success d-block text-success font-medium"
+            >
+              Habilitado
+            </button>
+          </td>
+
+          <td>
+            <button
+              type="button"
+              ngbTooltip="Actualizar Producto"
+              (click)="edit(item.id)"
+              class="btn btn-outline-success btn-sm"
+            >
+              <span><i class="fas fa-edit"></i></span>
+            </button>
+            <button
+              type="button"
+              ngbTooltip="Eliminar Producto"
+              (click)="eliminar(item.id)"
+              class="btn btn-sm btn-outline-danger"
+              style="margin-left: 5px"
+            >
+              <span><i class="fas fa-trash"></i></span>
+            </button>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+  <app-pagination
+    [totalItems]="totalElements"
+    [pageSize]="pageSize"
+    [currentPage]="pageNumber"
+    (pageChange)="onPageChange($event)"
+  >
+  </app-pagination>
+</div>

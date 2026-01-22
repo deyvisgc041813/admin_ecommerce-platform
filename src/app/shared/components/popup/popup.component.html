@@ -1,0 +1,27 @@
+<div class="popover-data popap-left" style="width: 300px; height: auto;" *ngIf="isActivate">
+  <div class="contenedor-interno">
+      <div class="title"><span>Seleccionar</span>
+        <!-- <button type="button"  class="close" data-dismiss="modal" aria-label="Close">
+          <span style="font-size: 20px;margin-right: inherit !important;" aria-hidden="true">&times;</span>
+        </button> -->
+      </div>
+      <div class="search right-inner-addon input-container">
+          <!-- <span><i class="fas fa-search"></i></span> -->
+          <div class="control has-icons-left">
+            <input (keyup)="search($event)"  class="form-control text-uppercase" maxlength="25" type="text" placeholder="Buscar por codigo o nombre..." />
+          </div>
+      </div>
+      <div class="data">
+        <div class="popap-select">
+        <div class="lista animated fadeInUp" *ngFor="let item of lista; let i = index;" (click)='seleccionarClick(i)'>
+              <div class="flex-1">
+                <span>{{item.value}}</span> -
+                <strong>{{item.descripcion}}</strong>
+              </div>
+          </div>
+          <!-- <div class="info-message" *ngIf="listUnidadMedida.length === 0 && !isloadinglista"><span>No se encontraron coincidencias</span></div> -->
+        </div>
+          <!-- <div class="info-message" v-if="!isLoading &amp; filtro !== ''"><span>No se encontraron mas coincidencias para <strong class="tag is-dark">{{filtro}}</strong></span></div> -->
+      </div>
+  </div>
+</div>

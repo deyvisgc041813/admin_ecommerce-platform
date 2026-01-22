@@ -1,0 +1,240 @@
+<div class="modal-header" *ngIf="titulo">
+  <h4 class="modal-title" id="modal-basic-title">{{titulo}}</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+</div>
+<div class="modal-body" *ngIf="titulo">
+  <div class="card">
+    <div class="card-body">
+      <ul ngbNav #customNav="ngbNav" [activeId]="1" class="nav-tabs nav-tabs-custom nav-justified">
+        <li [ngbNavItem]="1">
+          <a ngbNavLink>
+            <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+            <span class="d-none d-sm-block">Empresa</span>
+          </a>
+          <ng-template ngbNavContent>
+            <ng-template [ngTemplateOutlet]="TabContent"></ng-template>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="2">
+          <a ngbNavLink>
+            <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+            <span class="d-none d-sm-block">Cuenta Bancaria</span>
+          </a>
+          <ng-template ngbNavContent>
+            <ng-template [ngTemplateOutlet]="TabContent1"></ng-template>
+          </ng-template>
+        </li>
+       
+      </ul>
+      <div [ngbNavOutlet]="customNav"></div>
+    </div>
+  </div>
+  <div class="form-group d-flex justify-content-end">
+    <button type="button" (click)="onSubmit()" class="btn btn-outline-info rounded">
+      <span *ngIf="!isLoading">Guardar</span>
+      <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-2x"></i>
+    </button>
+  </div>
+</div>
+
+  <!-- Tab Content -->
+  <ng-template #TabContent>
+    <form [formGroup]="formGrup" class="space-y-3">
+      <div class="container mt-1">
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="form-group">
+                  <label for="exampleInputName">Ruc</label>
+                  <input type="text" appNumberOnly formControlName="ruc" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.controls['ruc'].errors }" id="ruc"/>
+                    <div *ngIf="submitted && f.controls['ruc'].errors" class="invalid-feedback">
+                     <div *ngIf="f.controls['ruc'].errors?.['required']">Numero de ruc es requerido</div>
+                     <div *ngIf="f.controls['ruc'].errors?.['minlength']">Minimo 11 digitos</div>
+                     <div *ngIf="f.controls['ruc'].errors?.['maxlength']">Maximo 11 digitos</div>
+                    </div>
+                </div>
+              </div>
+              <div class="col-md-6 mb-6">
+                <div class="form-group">
+                  <label for="exampleInputName">Razón Social</label>
+                  <input type="text" formControlName="razon_social" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.controls['razon_social'].errors }" id="razon_social"/>
+                    <div *ngIf="submitted && f.controls['razon_social'].errors" class="invalid-feedback">
+                     <div *ngIf="f.controls['razon_social'].errors?.['required']">Razón social es requerido</div>
+                    </div>
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <div class="form-group">
+                  <label for="exampleInputName">Email</label>
+                  <input type="text" formControlName="email" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.controls['email'].errors }" id="email"/>
+                    <div *ngIf="submitted && f.controls['email'].errors" class="invalid-feedback">
+                     <div *ngIf="f.controls['email'].errors?.['required']">Email es requerido</div>
+                     <div *ngIf="f.controls['email'].errors?.['email']">Email no tiene formato valido</div>
+                    </div>
+                </div>
+              </div>
+          <div class="col-md-6 mb-6">
+            <div class="form-group">
+              <label for="exampleInputName">Nombre</label>
+              <input type="text" formControlName="nombre" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.controls['nombre'].errors }" id="nombre"/>
+                <div *ngIf="submitted && f.controls['nombre'].errors" class="invalid-feedback">
+                 <div *ngIf="f.controls['nombre'].errors?.['required']">Nombre es requerido</div>
+                </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="form-group">
+              <label for="exampleInputName">Telefono</label>
+              <input type="text" appNumberOnly formControlName="telefono" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.controls['telefono'].errors }" id="telefono"/>
+                <div *ngIf="submitted && f.controls['telefono'].errors" class="invalid-feedback">
+                 <div *ngIf="f.controls['telefono'].errors?.['required']">Telefono es requerido</div>
+                </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="form-group d-flex justify-content-center" >
+              <div class="custom-dropzone-container">
+                <div
+                  class="dropzone"
+                  ngx-dropzone
+                  [multiple]="false"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  (change)="onArchivoCargado($event)"
+                >
+                  <div
+                    style="
+                      font-size: 15px;
+                      font-weight: bolder;
+                      text-align: center;
+                      width: 280px;
+                    "
+                    ngx-dropzone-label
+                    *ngIf="!archivo"
+                  >
+                    Subir Logo
+                    <p style="font-size: 10px; margin-top: 10px;">Tamaño maximo del logo 50 *50</p>
+                  </div>
+                  <img
+                    width="270"
+                    height="80"
+                    [src]="preview"
+                    *ngIf="archivo"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="form-group">
+              <label for="exampleInputName">Link Facebook</label>
+              <input type="text" formControlName="facebook" class="form-control"  id="facebook"/>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="form-group">
+              <label for="exampleInputName">Link Tictock</label>
+              <input type="text" formControlName="tictock" class="form-control" id="tictock"/>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="form-group">
+              <label for="exampleInputName">Link Instagram</label>
+              <input type="text" formControlName="instagram" class="form-control" id="instagram"/>
+      
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="form-group">
+              <label for="exampleInputName">Link Twitter</label>
+              <input type="text" formControlName="twitter" class="form-control" id="twitter"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </ng-template>
+
+  <!-- Tab Content -->
+  <ng-template #TabContent1>
+    <form [formGroup]="formGrupBank" class="space-y-3">
+      <div class="container mt-1">
+        <div class="row">
+            <div class="col-md-6 mb-6">
+              <div class="form-group">
+                <label for="exampleFormControlTextarea1"
+                  >Seleccione Banco</label
+                >
+                <ng-select
+                  [items]="banks"
+                  bindLabel="descripcion"
+                  formControlName="bank"
+                  placeholder="Seleccionar"
+                  [ngClass]="{ 'is-invalid': submitted && bank.controls['bank'].errors }"
+                  bindValue="descripcion"
+                >
+                </ng-select>
+                <div
+                  *ngIf="submitted && bank.controls['bank'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="bank.controls['bank'].errors?.['required']">
+                    Banco es requerido
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-6 mb-3">
+              <div class="form-group">
+                <label for="exampleInputName">Numero de cuenta</label>
+                <input type="text" appNumberOnly20dijitos formControlName="num_cuenta" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && bank.controls['num_cuenta'].errors }" id="num_cuenta"/>
+                  <div *ngIf="submitted && bank.controls['num_cuenta'].errors" class="invalid-feedback">
+                   <div *ngIf="bank.controls['num_cuenta'].errors?.['required']">Numero de cuenta es requerida</div>
+                  </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-6">
+              <div class="form-group">
+                <label for="exampleInputName">Cuenta Interbancaria (cci)</label>
+                <input type="text" appNumberOnly20dijitos formControlName="cci" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && bank.controls['cci'].errors }" id="cci"/>
+                  <div *ngIf="submitted && bank.controls['cci'].errors" class="invalid-feedback">
+                    <div *ngIf="bank.controls['cci'].errors?.['required']">Cuenta interbancaria es requerida</div>
+                    <div *ngIf="bank.controls['cci'].errors?.['minlength']">Minimo 20 digitos</div>
+                    <div *ngIf="bank.controls['cci'].errors?.['maxlength']">Maximo 20 digitos</div>
+                  </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-6">
+              <div class="form-group">
+                <label for="exampleFormControlTextarea1"
+                  >Seleccione Moneda</label
+                >
+                <ng-select
+                  [items]="moneda"
+                  bindLabel="descripcion"
+                  formControlName="moneda"
+                  placeholder="Seleccionar"
+                  [ngClass]="{ 'is-invalid': submitted && bank.controls['moneda'].errors }"
+                  bindValue="descripcion"
+                >
+                </ng-select>
+                <div
+                  *ngIf="submitted && bank.controls['moneda'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="bank.controls['moneda'].errors?.['required']">
+                    Moneda es requerido
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </form>
+  </ng-template>

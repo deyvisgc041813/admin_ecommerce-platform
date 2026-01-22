@@ -1,0 +1,450 @@
+<div class="modal-header" *ngIf="titulo">
+  <h4 class="modal-title" id="modal-basic-title">{{titulo}}</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+</div>
+<div class="modal-body" *ngIf="titulo">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+    <div class="card">
+      <div class="card-body">
+        <ul ngbNav #customNav="ngbNav" [activeId]="1" class="nav-tabs nav-tabs-custom nav-justified">
+          <li [ngbNavItem]="1">
+            <a ngbNavLink>
+              <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+              <span class="d-none d-sm-block">Informacion General</span>
+            </a>
+            <ng-template ngbNavContent>
+              <ng-template [ngTemplateOutlet]="TabContent"></ng-template>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="2">
+            <a ngbNavLink>
+              <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+              <span class="d-none d-sm-block">Información Corporativa</span>
+            </a>
+            <ng-template ngbNavContent>
+              <ng-template [ngTemplateOutlet]="TabConten1"></ng-template>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="3">
+            <a ngbNavLink>
+              <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+              <span class="d-none d-sm-block">Imagenes</span>
+            </a>
+            <ng-template ngbNavContent>
+              <ng-template [ngTemplateOutlet]="TabContent2"></ng-template>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="customNav"></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group d-flex justify-content-end">
+    <button type="submit" class="btn btn-outline-info rounded" (click)="guardar()">
+      <span *ngIf="!isLoading">Guardar</span>
+      <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-2x"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Tab Content -->
+<ng-template #TabContent>
+  <form class="space-y-3" [formGroup]="productFormGroup">
+    <div class="container mt-1 mb-2">
+      <div class="row mt-4">
+        <h5 class="mb-3" style="font-size: 15px;">Secciones de Eccomerce</h5>
+        <div class="col-md-2 mb-3">
+          <div class="form-check">
+            <input class="form-check-input" formControlName="llevateHoy" type="checkbox" id="llevateHoy">
+            <label class="form-check-label" for="llevateHoy">
+              Levatelos hoy
+            </label>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="form-check">
+            <input class="form-check-input" formControlName="nuevoProducto" type="checkbox" id="nuevoProducto">
+            <label class="form-check-label" for="nuevoProducto">
+              Nuevos Productos
+            </label>
+          </div>
+        </div> 
+        <div class="col-md-3 mb-3">
+          <div class="form-check">
+            <input class="form-check-input" formControlName="ofertaEspecial" type="checkbox" id="ofertaEspecial">
+            <label class="form-check-label" for="ofertaEspecial">
+              Ofertas Especiales
+            </label>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="form-check">
+            <input class="form-check-input" formControlName="destacadoSemana" type="checkbox" id="destacadoSemana">
+            <label class="form-check-label" for="destacadoSemana">
+              Destacados de la semana
+            </label>
+          </div>
+        </div>  
+        <hr>
+
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <div class="form-check">
+            <input class="form-check-input" formControlName="isAccesorio" type="checkbox" id="isAccesorio">
+            <label class="form-check-label" for="destacadoSemana">
+              Es accesorio
+            </label>
+          </div>
+        </div>  
+        <div class="col-md-8 mb-3">
+          <div class="form-group">
+            
+            <label for="exampleInputName">Nombre Producto</label>
+            
+            <input type="text" formControlName="nombre" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.controls['nombre'].errors }" id="nombre" />
+            <div *ngIf="submitted && f.controls['nombre'].errors" class="invalid-feedback">
+              <div *ngIf="f.controls['nombre'].errors?.['required']">Nombre producto es requerido</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="form-group">
+            <label for="exampleInputName">Codigo Producto </label>
+            <input readonly type="text" formControlName="codigo" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.controls['codigo'].errors }" id="codigo" />
+            <div *ngIf="submitted && f.controls['codigo'].errors" class="invalid-feedback">
+              <div *ngIf="f.controls['codigo'].errors?.['required']">Codigo producto es requerido</div>
+            </div>
+          </div>
+        </div>
+    
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="exampleInputPassword1">Categoria</label>
+            <div class="custom-dropdown-container">
+              <ng-select [ngClass]="{ 'is-invalid': submitted && f.controls['categoria'].errors }" [items]="categoria"
+                bindLabel="category_name"  (change)="onchangeSubcategory($event)" formControlName="categoria" placeholder="Seleccionar Categoria"
+                bindValue="id">
+              </ng-select>
+              <div *ngIf="submitted && f.controls['categoria'].errors" class="invalid-feedback">
+                <div *ngIf="f.controls['categoria'].errors?.['required']">Categoria es requerido</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="exampleInputPassword1">Sub Categoria</label>
+            <div class="custom-dropdown-container">
+              <ng-select [ngClass]="{ 'is-invalid': submitted && f.controls['subCategoryId'].errors }"
+                [items]="subCategory" bindLabel="subcategory_name" formControlName="subCategoryId"
+                placeholder="Seleccionar Sub Categoria" bindValue="subcategory_id">
+              </ng-select>
+              <div *ngIf="submitted && f.controls['subCategoryId'].errors" class="invalid-feedback">
+                <div *ngIf="f.controls['subCategoryId'].errors?.['required']">Sub Categoria es requerido</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="exampleInputName">Modelo Producto </label>
+            <input type="text" formControlName="modelo" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.controls['modelo'].errors }" id="modelo" />
+            <div *ngIf="submitted && f.controls['modelo'].errors" class="invalid-feedback">
+              <div *ngIf="f.controls['modelo'].errors?.['required']">Modelo producto es requerido</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="exampleInputName">Descuento Producto </label>
+            <input type="text" appNumberDecimals formControlName="descuento" class="form-control" id="descuento" />
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="exampleInputPassword1">Marca Producto</label>
+            <div class="custom-dropdown-container">
+              <ng-select [items]="marca" bindLabel="brand_name" formControlName="marcaId" placeholder="Seleccionar Marca" bindValue="id">
+              </ng-select>
+              <div *ngIf="submitted && f.controls['marcaId'].errors" class="invalid-feedback">
+                <div *ngIf="f.controls['marcaId'].errors?.['required']">Marca es requerida</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="exampleInputPassword1">Color Producto</label>
+            <div class="custom-dropdown-container">
+
+              <ng-select [ngClass]="{ 'is-invalid': submitted && f.controls['color'].errors }" [items]="color"
+                bindLabel="name" formControlName="color" placeholder="Seleccionar Color" bindValue="name">
+              </ng-select>
+              <div *ngIf="submitted && f.controls['categoria'].errors" class="invalid-feedback">
+                <div *ngIf="f.controls['categoria'].errors?.['required']">Color es requerido</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="exampleInputName">Capacidad Producto </label>
+            <input type="text" appNumberOnly formControlName="capacidad" class="form-control" id="capacidad" />
+          </div>
+        </div>
+        <!-- <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="exampleInputPassword1">Capacidad Producto</label>
+            <div class="custom-dropdown-container">
+
+              <ng-select [ngClass]="{ 'is-invalid': submitted && f.controls['color'].errors }" [items]="color"
+                bindLabel="name" formControlName="color" placeholder="Seleccionar Color" bindValue="name">
+              </ng-select>
+              <div *ngIf="submitted && f.controls['categoria'].errors" class="invalid-feedback">
+                <div *ngIf="f.controls['categoria'].errors?.['required']">Color es requerido</div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="exampleInputName">Accesorios</label>
+            <div class="custom-dropdown-container">
+              <ng-select [multiple]="true" [items]="accesorios" bindLabel="name" formControlName="accesorios" placeholder="Seleccionar accesoios" bindValue="id">
+              </ng-select>
+              <div *ngIf="submitted && f.controls['categoria'].errors" class="invalid-feedback">
+                <div *ngIf="f.controls['categoria'].errors?.['required']">Color es requerido</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="exampleInputName">Garantia</label>
+            <div class="custom-dropdown-container">
+              <ng-select [items]="garantia"
+                bindLabel="name" formControlName="garantia" placeholder="Seleccionar accesoios" bindValue="name">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="exampleInputName">Descripcion Producto </label>
+            <textarea formControlName="descripcion" class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.controls['descripcion'].errors }" class="form-control rounded"
+              id="exampleFormControlTextarea1" rows="3"></textarea>
+
+            <div *ngIf="submitted && f.controls['descripcion'].errors" class="invalid-feedback">
+              <div *ngIf="f.controls['descripcion'].errors?.['required']">Descripcion producto es
+                requerido
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+</ng-template>
+
+<ng-template #TabConten1>
+  <form class="space-y-3" [formGroup]="productFormGroup">
+    <div class="container mt-1">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <div class="form-group">
+            <label for="exampleInputPassword1">Empresa</label>
+            <div class="custom-dropdown-container">
+
+              <ng-select
+              [items]="company"
+              bindLabel="name"
+              formControlName="empresa"
+              placeholder="Seleccionar"
+              [ngClass]="{ 'is-invalid': submitted && f.controls['empresa'].errors }"
+              (change)="getTiendaByCompany($event?.company_id)"
+              bindValue="company_id"
+            >
+            </ng-select>
+              <div *ngIf="submitted && f.controls['empresa'].errors" class="invalid-feedback">
+                <div *ngIf="f.controls['empresa'].errors?.['required']">Empresa es requerido</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-md-6 mt-4">
+          <div class="form-check">
+            <input class="form-check-input" formControlName="recojoDespacho" type="checkbox" id="recojoDespacho">
+            <label class="form-check-label" for="recojoDespacho">
+              Recojo en despacho
+            </label>
+          </div>
+        </div>
+        <fieldset class="p-3 border rounded" style="margin-bottom: 20px;">
+          <legend class="font-weight-bold">
+            <label style="font-size: 15px;">Gestión de Sucursales</label>
+          </legend>
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body" style="margin-top: -20px;">
+                <button
+                  type="button"
+                  class="btn btn-outline-success"
+                  (click)="agregarStore()"
+                > Agregar
+                </button> <div  formArrayName="store" [ngClass]="store.length < 5 ? '' : 'scroll-form'"
+                >
+                  <div class="container mt-2">
+                    <div
+                      *ngFor=" let store of store?.controls;    let i = index
+                      "
+                      [formGroupName]="i"
+                    >
+                      <ng-container *ngIf="store as storeForm" >
+                        <div class="row d-flex justify-content-around">
+                          <div class="col-md-5 mb-2">
+                            <div class="form-group">
+                              <label for="exampleFormControlTextarea1" >Seleccionar Tienda</label
+                              >
+                              <ng-select
+                              [items]="tienda"
+                              bindLabel="name"
+                              bindValue="store_id"
+                              formControlName="tienda"
+                              (change)="changeStore(i)"
+                              placeholder="Seleccionar"
+                              [ngClass]="{
+                                'is-invalid': submitted && storeForm?.get('tienda')?.invalid
+                              }" >
+                            </ng-select>
+                              <div
+                                *ngIf="
+                                  submitted &&
+                                  storeForm?.get('tienda')
+                                    ?.invalid
+                                "
+                                class="invalid-feedback"
+                              >
+                                <div
+                                  *ngIf="
+                                    storeForm
+                                      ?.get('tienda')
+                                      ?.hasError('required')
+                                  "
+                                >
+                                  Tienda es requerido
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                              <label for="exampleInputName">Precio </label>
+                              <input type="text" appNumberDecimals formControlName="precio" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && storeForm?.get('precio')?.invalid }" id="precio" />
+                              <div *ngIf="submitted && storeForm?.get('precio')?.invalid" class="invalid-feedback">
+                                <div *ngIf="storeForm?.get('precio')?.hasError('required')">Precio producto es requerido</div>
+                                <div *ngIf="storeForm?.get('precio')?.hasError('min')">Precio producto debe ser mayor a 0</div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="col-md-3 mb-3">
+                            <div class="form-group">
+                              <label for="exampleInputName">Stock </label>
+                              <input type="text" appNumberOnly formControlName="stock" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted &&  storeForm ?.get('stock')?.invalid }" id="stock" />
+                              <div *ngIf="submitted && storeForm?.get('stock')?.invalid" class="invalid-feedback">
+                                <div *ngIf="storeForm?.get('stock')?.hasError('required')">Stock producto es requerido</div>
+                                <div *ngIf="storeForm?.get('stock')?.hasError('min')">Stock producto debe ser mayor a 0</div>
+                              </div>
+                            </div>
+                          </div> 
+                          <div class="col-md-1 mb-2">
+                            <div class="form-group">
+                              <button
+                                type="button"
+                                (click)="eliminarStore(i)"
+                                class="btn btn-sm btn-outline-danger"
+                                style="margin-top: 30px"
+                              >
+                                <span><i class="fas fa-trash"></i></span>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+      </div>
+    </div>
+  </form>
+
+</ng-template>
+
+<!-- Tab Content -->
+<ng-template #TabContent2>
+  <div class="card">
+    <div class="card-body">
+      <p class="card-title-desc">como maximo se pueden subir 7 imagenes para el detalle del producto, con formato, pdf, jpeg, jpg, png y
+        webp
+      </p>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3">
+          <ngx-dropzone (change)="onSelect($event, 'principal')" [multiple]="false"
+            accept="image/jpeg,image/jpg,image/png,image/webp">
+            <ngx-dropzone-label>Imagen Principal</ngx-dropzone-label>
+            <ngx-dropzone-preview class="custom-preview" *ngIf="filePrincipal" [ngbTooltip]="filePrincipal?.file?.name"
+              [removable]="true" (removed)="onRemove(filePrincipal, 'principal')">
+              <ngx-dropzone-label>
+                <!-- <i class="fas fa-images fa-4x"
+                  *ngIf="filePrincipal?.type === 'image/jpeg' || filePrincipal?.type === 'image/jpg'|| filePrincipal?.type === 'image/png'"></i> -->
+                <img #hiddenImage style="width: 100px; height: 100px;" [src]="filePrincipal?.preview"
+                  [alt]="filePrincipal?.file?.name" class="preview-image">
+                  <!-- <ng-template #srcupload>
+                    <img style="width: 100px; height: 100px;" [src]="filePrincipal"
+                    [alt]="filePrincipal?.file?.name" class="preview-image">
+                  </ng-template> -->
+              </ngx-dropzone-label>
+            </ngx-dropzone-preview>
+          </ngx-dropzone>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 col-xxl-9">
+          <ngx-dropzone class="custom-dropzone" (change)="onSelect($event, 'secundario')" [multiple]="true"
+            accept="image/jpeg,image/jpg,image/png, image/webp">
+            <ngx-dropzone-label>Haga clic o arrastre los archivos para cargar</ngx-dropzone-label>
+            <ngx-dropzone-preview class="custom-preview-secondary" *ngFor="let f of files" [ngbTooltip]="f.name"
+              [removable]="true" (removed)="onRemove(f, 'secundario')">
+              <ngx-dropzone-label>
+                <img style="width: 100px; height: 100px;" [src]="f.preview" [alt]="f.name" class="preview-image">
+                <!-- <ng-container *ngIf="f.type === 'application/pdf'; else imageTemplate">
+                  <i class="fas fa-file-pdf fa-4x" style="color: #E63946;"></i>
+                </ng-container>
+                <ng-template #imageTemplate>
+                  <img *ngIf="isImage(f.type)" [src]="f.preview" [alt]="f.name" class="preview-image">
+                </ng-template> -->
+              </ngx-dropzone-label>
+
+            </ngx-dropzone-preview>
+          </ngx-dropzone>
+        </div>
+      </div>
+
+      <div>
+
+      </div>
+    </div>
+  </div>
+</ng-template>
+

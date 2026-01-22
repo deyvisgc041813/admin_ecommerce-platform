@@ -1,0 +1,81 @@
+<div class="card">
+    <div class="card-body">
+      <div class="row mb-md-2">
+        <div class="col-12 col-md-6 mb-2 mb-md-0">
+          <div class="dataTables_length" id="tickets-table_length">
+            <label class="d-inline-flex align-items-center">Mostrar
+              <select name="tickets-table_length" aria-controls="tickets-table" [(ngModel)]="filtros.pageSize"
+                (change)="onPageSizeChange(filtros.pageSize)" class="form-control form-control-sm mx-2">
+                <option [ngValue]="10">10</option>
+                <option [ngValue]="25">25</option>
+                <option [ngValue]="50">50</option>
+                <option [ngValue]="100">100</option>
+              </select> entradas</label>
+          </div>
+        </div>
+        <!-- Search -->
+        <div class="col-12 col-md-6 text-md-end mb-2 mb-md-0">
+          <div id="tickets-table_filter" class="dataTables_filter">
+            <label class="d-inline-flex align-items-center">Buscar:
+              <input type="text" name="searchTerm" class="form-control form-control-sm ms-2"
+                aria-controls="tickets-table" [(ngModel)]="searchTerm">
+            </label>
+  
+          </div>
+        </div>
+        <!-- End search -->
+      </div>
+      <div class="table-responsive">
+        <table class="table align-middle table-nowrap table-hover">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">Fecha Creación</th>
+              <th scope="col">Permiso</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let perm of permissionModule | filter:searchTerm">
+              <td>{{ perm?.created_at | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+              <td>{{ perm?.permission_name }}</td>
+              <td>
+                <button *ngIf="perm.status === '0'" type="button" class="btn d-flex btn-light-danger d-block text-danger font-medium">
+                  Deshabilitado
+                </button>
+                <button *ngIf="perm.status === '1'" type="button" class="btn d-flex btn-light-success d-block text-success font-medium">
+                  Habilitado
+                </button>
+              </td>
+              <td>
+                <button type="button" *ngIf="perm.status=== '1'" ngbTooltip="Actualizar" class="btn btn-outline-success btn-sm" (click)="edit(perm.permission_id)">
+                  <span><i class="fas fa-edit"></i></span>
+                </button>
+                <button type="button" [ngbTooltip]="perm.status=== '1' ? 'Desactivar': 'Activar'" (click)="actualizarEstado(perm.permission_id, perm.status)"
+                  class="btn btn-sm btn-outline-danger ms-1"
+                  [ngClass]="{'btn-outline-danger': perm.status=== '1', 'btn-outline-success': perm.status!== '1'}">
+                  <span><i class="fas fa-toggle-off" *ngIf="perm.status=== '1'"></i></span>
+                  <span><i class="fas fa-toggle-on" *ngIf="perm.status=== '0'"></i></span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row justify-content-md-between align-items-md-center mt-2">
+        <div class="col-12 col-md-5 mb-2 mb-md-0">
+          <div class="dataTables_info" id="tickets-table_info" role="status" aria-live="polite">Mostrando
+            {{filtros.page}} a {{filtros.pageSize}} de {{total}} entradas
+          </div>
+        </div>
+        <!-- Pagination -->
+        <div class="col-12 col-md-5">
+          <div class="d-flex justify-content-end justify-content-md-end">
+            <ngb-pagination [collectionSize]="total" [(page)]="filtros.page" [pageSize]="filtros.pageSize" (pageChange)="onPageChange($event)">
+            </ngb-pagination>
+          </div>
+        </div>
+        <!-- End Pagination -->
+      </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Destacar categoria</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="getDismissReason(0)"
+  ></button>
+</div>
+<div class="modal-body">
+  <form class="space-y-3">
+    <div class="card">
+      <div class="card-body">
+        <p class="card-title-desc">como maximo se pueden subir 1 imagen con formato, jpeg, jpg, png y webp
+          </p>
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+            <ngx-dropzone
+              (change)="onSelect($event)"
+              [multiple]="false"
+              accept="image/jpeg,image/jpg,image/png,image/webp"
+            >
+              <ngx-dropzone-label>Adjuntar Imagen</ngx-dropzone-label>
+              <ngx-dropzone-preview
+                class="custom-preview"
+                *ngIf="filePrincipal"
+                [ngbTooltip]="filePrincipal?.file?.name"
+                [removable]="true"
+                (removed)="onRemove()"
+              >
+                <ngx-dropzone-label>
+                  <img
+                    #hiddenImage
+                    style="width: 100px; height: 100px;"
+                    [src]="filePrincipal?.preview"
+                    [alt]="filePrincipal?.file?.name"
+                    class="preview-image"
+                  />
+                </ngx-dropzone-label>
+              </ngx-dropzone-preview>
+            </ngx-dropzone>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="form-group d-flex justify-content-end">
+            <button type="submit" class="btn btn-outline-info rounded" (click)="upload()">
+              <span *ngIf="!isLoading">Guardar</span>
+              <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-2x"></i>
+            </button>
+          </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,67 @@
+<div class="modal-header" *ngIf="titulo">
+  <h4 class="modal-title" id="modal-basic-title">{{ titulo }}</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="getDismissReason(0)"
+  ></button>
+</div>
+<div class="modal-body" *ngIf="titulo">
+  <!-- <div class="alert alert-danger" *ngIf="errors.length > 0"  role="alert">
+      <span *ngFor="let err of errors; let last = last">
+          <span [innerHTML]="'*' + err.mensaje + (last ? '' : '<br>')"></span>
+      </span>
+    </div> -->
+  <form
+    [formGroup]="formGrupPermissions"
+    [ngClass]="permissions.length < 5 ? '' : 'scroll-form'"
+  >
+    <button type="button" class="btn btn-outline-success" (click)="agregar()" *ngIf="!formPermission">
+      Agregar Permiso
+    </button>
+    <p></p>
+    <div formArrayName="permissions">
+      <div class="container">
+        <div
+          *ngFor="let perm of permissions.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <ng-container *ngIf="perm as permissionsFormGroup">
+            <div class="row d-flex justify-content-around">
+              <div class="col-md-11 mb-3">
+                <div class="form-group">
+                  <label for="inputNombre">Descripción</label>
+                  <input type="text" class="form-control text-uppercase" formControlName="permission_name"
+                    id="permission_name"
+                    [ngClass]="{ 'is-invalid': submitted && permissionsFormGroup.get('permission_name')?.invalid }" />
+                  <div *ngIf="submitted  && permissionsFormGroup.get('permission_name')?.invalid"
+                    class="invalid-feedback">
+                    <div *ngIf="permissionsFormGroup.get('permission_name')?.hasError('required')">Permiso es requerido</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-1 mb-3">
+                <div class="form-group">
+                  <button
+                    type="button"
+                    (click)="eliminar(i)"
+                    class="btn btn-sm btn-outline-danger mt-4"
+                  >
+                    <span><i class="fas fa-trash"></i></span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="modal-footer" style="position: static">
+    <button type="submit" class="btn btn-outline-info" (click)="onSubmit()">
+      <span *ngIf="!isLoading"> Guardar</span>
+      <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-1x"></i>
+    </button>
+  </div>
+</div>

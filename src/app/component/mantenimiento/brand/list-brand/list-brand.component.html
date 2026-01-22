@@ -1,0 +1,94 @@
+<div class="d-flex justify-content-between mb-2">
+  <div class="form-group">
+    <input
+      type="text"
+      class="form-control"
+      [(ngModel)]="textSearch"
+      id="name"
+      placeholder="Buscar"
+    />
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table mb-0">
+    <thead class="table-light">
+      <tr>
+        <th>#</th>
+        <th>Descripción</th>
+        <th>Imagen</th>
+        <th>Estado</th>
+        <th>Opciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="list?.content | filter : textSearch as result">
+        <tr *ngFor="let item of result | filter : textSearch; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.brand_name }}</td>
+          <td>
+            <img
+              width="100"
+              height="100"
+              [src]="item.brand_img_url"
+              [alt]="item.name"
+            />
+          </td>
+
+          <td>
+            <button
+              *ngIf="+item.status === 0"
+              type="button"
+              class="btn d-flex btn-light-danger d-block text-danger font-medium"
+            >
+              Desabilitado
+            </button>
+            <button
+              type="button"
+              class="btn d-flex btn-light-success d-block text-success font-medium"
+            >
+              Habilitado
+            </button>
+          </td>
+
+          <td>
+            <button
+              type="button"
+              ngbTooltip="Actualizar Producto"
+              (click)="edit(item.id)"
+              class="btn btn-outline-success btn-sm"
+            >
+              <span><i class="fas fa-edit"></i></span>
+            </button>
+            <button
+            type="button"
+            *ngIf="+item.status === 1"
+            ngbTooltip="Desabilitar"
+            (click)="changeStatus(item.id, item.status)"
+            class="btn btn-sm btn-outline-danger"
+            style="margin-left: 5px"
+          >
+            <i class="fas fa-unlock"></i>
+          </button>
+          <button
+            type="button"
+            *ngIf="+item.status === 0"
+            ngbTooltip="Habilitar"
+            (click)="changeStatus(item.id, item.status)"
+            class="btn btn-sm btn-outline-success"
+            style="margin-left: 5px"
+          >
+          <i class="fas fa-lock"></i>
+          </button>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+  <app-pagination
+    [totalItems]="totalElements"
+    [pageSize]="pageSize"
+    [currentPage]="pageNumber"
+    (pageChange)="onPageChange($event)"
+  >
+  </app-pagination>
+</div>

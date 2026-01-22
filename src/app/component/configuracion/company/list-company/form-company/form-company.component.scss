@@ -1,0 +1,23 @@
+.scroll-form {
+    height: 440px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+.custom-dropzone-container {
+    width: 330px;
+    height: 100px;
+    border: 2px dashed #ccc; /* Estilo de borde */
+    border-radius: 5px; /* Borde redondeado */
+    display: flex; /* Usa el modelo de caja flexible para centrar el contenido verticalmente */
+    align-items: center; /* Centra el contenido verticalmente */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    text-align: center; /* Alinea el texto al centro */
+    overflow: hidden; /* Oculta el desbordamiento de elementos más grandes que el contenedor */
+    margin-top: 25px;
+  }
+  
+  .dropzone {
+    width: 100%; /* Utiliza el 100% del ancho del contenedor */
+    height: 100%; /* Utiliza el 100% de la altura del contenedor */
+  }
+  

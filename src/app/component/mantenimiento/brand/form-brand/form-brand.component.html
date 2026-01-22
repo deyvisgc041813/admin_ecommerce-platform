@@ -1,0 +1,144 @@
+<div class="modal-header" *ngIf="titulo">
+  <h4 class="modal-title" id="modal-basic-title">{{ titulo }}</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="getDismissReason(0)"
+  ></button>
+</div>
+<div class="modal-body" *ngIf="titulo">
+  <!-- <div class="alert alert-danger" *ngIf="errors.length > 0"  role="alert">
+      <span *ngFor="let err of errors; let last = last">
+          <span [innerHTML]="'*' + err.mensaje + (last ? '' : '<br>')"></span>
+      </span>
+    </div> -->
+  <form
+    [formGroup]="formGrupBrand"
+    [ngClass]="brand.length < 5 ? '' : 'scroll-form'"
+  >
+    <button
+      type="button"
+      *ngIf="!formBrand"
+      class="btn btn-outline-success"
+      (click)="agregarSubCategory()"
+    >
+      Agregar
+    </button>
+    <p></p>
+    <div formArrayName="brand">
+      <div class="container">
+        <div
+          *ngFor="let bra of brand.controls; let i = index"
+          [formGroupName]="i"
+        >
+          <ng-container *ngIf="bra as brandFormGroup">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <div class="form-group">
+                  <label for="inputNombre">Nombre</label>
+                  <input
+                    type="text"
+                    class="form-control text-uppercase"
+                    formControlName="brand_name"
+                    id="inputNombre"
+                    [ngClass]="{
+                      'is-invalid':
+                        submitted && brandFormGroup.get('brand_name')?.invalid
+                    }"
+                  />
+                  <div
+                    *ngIf="
+                      submitted && brandFormGroup.get('brand_name')?.invalid
+                    "
+                    class="invalid-feedback"
+                  >
+                    <div
+                      *ngIf="
+                        brandFormGroup.get('brand_name')?.hasError('required')
+                      "
+                    >
+                      Descripción es requerido
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <div class="form-group">
+                  <div class="custom-dropzone-container">
+                    <div
+                      class="dropzone"
+                      ngx-dropzone
+                      [multiple]="false"
+                      accept="image/jpeg,image/jpg,image/png,image/webp"
+                      (change)="onArchivoCargado($event, i)"
+             
+                    >
+                      <div
+                        style="
+                          font-size: 15px;
+                          font-weight: bolder;
+                          text-align: center;
+                          width: 280px;
+                        "
+                        ngx-dropzone-label *ngIf="!brandFormGroup?.get('brand_img_url')?.value"
+                        [ngClass]="{ 'is-invalid': submitted && brandFormGroup.get('brand_img_url')?.invalid}"
+                      >
+                        Arrastrar Imagen
+                      </div>
+                      <div *ngIf="submitted && brandFormGroup.get('brand_img_url')?.invalid" class="invalid-feedback">
+                        <div *ngIf="brandFormGroup .get('brand_img_url')?.hasError('required')"> Imagen es requerido </div>
+                      </div>
+                      <img
+                        width="270"
+                        height="80"
+                        [src]="brandFormGroup?.get('brand_img_url')?.value?.preview || brandFormGroup?.get('brand_img_url')?.value"
+                        *ngIf="brandFormGroup?.get('brand_img_url')?.value"
+                      />
+                      <button
+                        *ngIf="brandFormGroup?.get('brand_img_url')?.value"
+                        type="button"
+                        style="
+                          margin-top: -58px;
+                          font-size: 7px;
+                          margin-left: 10px;
+                        "
+                        class="btn btn-sm btn-outline-danger btn-delete"
+                        (click)="eliminarImagen(brandFormGroup)"
+                      >
+                        <i class="fas fa-trash"></i>
+                      </button>
+
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2 mb-3">
+                <div class="d-flex justify-content-center mb-1">
+                  <div class="form-group">
+                    <button
+                      type="button"
+                      (click)="eliminar(i)"
+                      *ngIf="!formBrand"
+                      class="btn btn-sm btn-outline-danger"
+                      style="margin-top: 25px"
+                    >
+                      <span><i class="fas fa-trash"></i></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="modal-footer" style="position: static">
+    <button type="submit" class="btn btn-outline-info" (click)="onSubmit()">
+      <span *ngIf="!isLoading"> Guardar</span>
+      <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-1x"></i>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,105 @@
+<div class="container-fluid">
+  <app-page-title
+    title="Menú de Navegación Principal"
+    [breadcrumbItems]="breadCrumbItems"
+  ></app-page-title>
+
+  <div class="row">
+    <div class="col-xl-4 col-sm-6" *ngFor="let data of shopsData">
+      <div class="card">
+        <div class="row">
+          <div class="col-xl-5">
+            <div class="text-center p-4 border-end">
+              <div class="avatar-sm mx-auto mb-3 mt-1">
+                <span
+                  class="avatar-title rounded-circle bg-soft bg-{{
+                    data?.color
+                  }} text-{{ data?.color }} font-size-16"
+                >
+                  {{ data.name.charAt(0) }}
+                </span>
+              </div>
+              <h5 class="text-truncate pb-1" style="white-space: pre-wrap">
+                {{ data?.name }}
+              </h5>
+            </div>
+          </div>
+
+          <div class="col-xl-7">
+            <div class="p-4 text-center text-xl-start">
+              <div class="row">
+                <div class="col-md-12">
+                  <div>
+                    <p class="text-muted mb-2 text-truncate">
+                      Sub menus de Inicio
+                    </p>
+                    <div class="sub-categotria">
+                      <ul>
+                        <li
+                          *ngFor="let sub of data?.subCategoria | slice : 0 : 3"
+                        >
+                          {{ sub.subcategory_name }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                  <div class="card-footer bg-transparent border-top">
+                    <div class="contact-links d-flex font-size-20">
+                      <div class="flex-fill">
+                        <a href="javascript: void(0);" (click)="agregar(data.categoryId)" ngbTooltip="Agregar sub menus pagina principal"
+                          ><i class="fas fa-bars"></i
+                        ></a>
+                      </div>
+                      <div class="flex-fill">
+                        <a href="javascript: void(0);" (click)="navegacionPrincipal(data.categoryId)" ngbTooltip="Agregar Modulo"
+                          ><i class="bx bx-user-circle"></i
+                        ></a>
+                      </div>
+                      <div class="flex-fill">
+                        <a
+                          href="javascript: void(0);"
+                          (click)="addDestacado(data.categoryId)"
+                          ><i class="fas fa-star"></i></a>
+                      </div>
+                      <div class="flex-fill">
+                        <a
+                          href="javascript: void(0);"
+                          [routerLink]="['/store-oinline-menu', data.parent_name]"
+                          ngbTooltip="Mostrar mas"
+                          ><i class="fas fa-eye"></i
+                        ></a>
+                      </div>
+                     
+                    </div>
+                  </div>
+              </div>
+              <div class="mt-4">
+                <!-- <div class="d-flex justify-content-around">
+                  <a
+                  href="javascript: void(0);"
+                  class="text-decoration-underline text-reset"
+                  (click)="agregar(data.categoryId)"
+                  >Agregar<i class="mdi mdi-arrow-right"></i
+                ></a>
+                <a
+                  href="javascript: void(0);"
+                  class="text-decoration-underline text-reset"
+                  (click)="agregar(data.categoryId)"
+                  >Agregar Módulo<i class="mdi mdi-arrow-right"></i
+                ></a>
+                <a
+                  href="javascript: void(0);"
+                  class="text-decoration-underline text-reset"
+                  >Mostrar mas<i class="mdi mdi-arrow-right"></i
+                ></a>
+                </div> -->
+               
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

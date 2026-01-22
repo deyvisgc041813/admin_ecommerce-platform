@@ -1,0 +1,75 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "module": "es2020",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    // "paths": {
+    //   "@facturador/core":["src/app/core/index.ts"],
+    //   // "@facturador/servicios":["src/app/servicios/index.ts"],
+    //   // "@facturador/type":["src/app/type/index.ts"]
+    // },
+    "paths": {
+      "@rdinvesiones/core/services/*": [
+        "./src/app/core/services/*"
+      ],
+      "@rdinvesiones/core/interface/*": [
+        "./src/app/core/interface/*"
+      ],
+      "@rdinvesiones/core/constantes/*": [
+        "./src/app/core/constantes/*"
+      ],
+      "@rdinvesiones/core/guards/*": [
+        "./src/app/core/guards/*"
+      ],
+      "@rdinvesiones/core/enum/*": [
+        "./src/app/core/enum/*"
+      ],
+      "@rdinvesiones/shared":["src/app/shared/index.ts"]
+      
+      // "@shared/*": [
+      //   "src/app/modules/shared/*"
+      // ],
+      // "@auth/*": [
+      //   "src/app/modules/auth/*"
+      // ],
+      // "@boards/*": [
+      //   "src/app/modules/boards/*"
+      // ],
+      // "@environments/*": [
+      //   "./src/environments/*"
+      // ],
+      // "@guards/*": [
+      //   "./src/app/guards/*"
+      // ],
+      // "@interceptors/*": [
+      //   "./src/app/interceptors/*"
+      // ],
+      // "@services/*": [
+      //   "./src/app/services/*"
+      // ],
+      // "@utils/*": [
+      //   "./src/app/utils/*"
+      // ]
+    },
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ]
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true,
+  }
+}

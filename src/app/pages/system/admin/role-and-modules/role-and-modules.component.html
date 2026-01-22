@@ -1,0 +1,29 @@
+<div class="container-fluid">
+    <app-page-title title="Modulos y perfiles" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6 col-md-6 mb-12 mb-md-12">
+                <div class="d-flex justify-content-end">
+                  <button class="btn btn-outline-info btn-group-lg" (click)="openModulo()">
+                    Nuevo <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+                <app-list-modules (update)="isUpdateModulo($event)"></app-list-modules>
+              </div>
+              <div class="col-6 col-md-6 mb-12 mb-md-12">
+                <div class="d-flex justify-content-end">
+                  <button class="btn btn-outline-info btn-group-lg" (click)="openPermisoRole()">
+                    Nuevo <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+                <app-list-role (update)="isUpdateRole($event)"></app-list-role>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

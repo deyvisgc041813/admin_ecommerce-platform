@@ -1,0 +1,104 @@
+<div class="d-flex justify-content-between mb-2">
+    <div class="form-group" >
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="textSearch"
+        id="name"
+        placeholder="Buscar"
+      />
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table mb-0 table-hover align-middle text-center">
+      <thead class="table-light">
+        <tr>
+         <th>logo</th>
+         <!-- <th>Nombre</th> -->
+          <th>Ruc</th>
+          <th>Razón Social</th>
+          <th>Entidad Bancaria</th>
+          <th>N° de Cuenta</th>
+          <th>CCI (Cuenta Interbancaria)</th>
+          <th>Moneda</th>     
+          <th>Telefono</th>
+          <th>Email</th>     
+          <th>Estado</th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="list?.content | filter : textSearch as result">
+          <tr *ngFor="let item of result | filter : textSearch; let i = index">
+            <td><img [src]="item.logo" height="50" width="50" alt="logo"></td>
+            <!-- <td>{{ item.name }}</td> -->
+            <td>{{ item.ruc }}</td>
+            <td>{{ item.razon_social }}</td>
+            <td>{{ item.bank_name }}</td>
+            <td>{{ item.account_number }}</td>
+            <td>{{ item.interbank_account_number }}</td>
+            <td>{{ item.currency }}</td>
+            <td>{{ item.phone }}</td>
+            <td>{{ item.email }}</td>
+            <td>
+              <button
+                *ngIf="+item.status === 0"
+                type="button"
+                class="btn d-flex btn-light-danger d-block text-danger font-medium"
+              >
+                Desabilitado
+              </button>
+              <button
+                *ngIf="+item.status === 1"
+                type="button"
+                class="btn d-flex btn-light-success d-block text-success font-medium"
+              >
+                Habilitado
+              </button>
+            </td>
+
+            <td>
+              <button
+                type="button"
+                ngbTooltip="Actualizar compania"
+                (click)="edit(item.company_id)"
+                class="btn btn-outline-success btn-sm"
+              >
+                <span><i class="fas fa-edit"></i></span>
+              </button>
+              <button
+                type="button"
+                *ngIf="+item.status === 1"
+                ngbTooltip="Desabilitar"
+                (click)="changeStatus(item.company_id, item.status)"
+                class="btn btn-sm btn-outline-danger"
+                style="margin-left: 5px"
+              >
+                <i class="fas fa-unlock"></i>
+              </button>
+              <button
+                type="button"
+                *ngIf="+item.status === 0"
+                ngbTooltip="Habilitar"
+                (click)="changeStatus(item.company_id, item.status)"
+                class="btn btn-sm btn-outline-success"
+                style="margin-left: 5px"
+              >
+              <i class="fas fa-lock"></i>
+              </button>
+            </td>
+
+
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    <app-pagination
+      [totalItems]="totalElements"
+      [pageSize]="pageSize"
+      [currentPage]="pageNumber"
+      (pageChange)="onPageChange($event)"
+    >
+    </app-pagination>
+  </div>
+  

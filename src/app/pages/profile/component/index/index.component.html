@@ -1,0 +1,187 @@
+<app-loader></app-loader>
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-flex align-items-center justify-content-between">
+                <h4 class="mb-0 font-size-18">Dashboard</h4>
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item active">Welcome to Dashboard</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="card overflow-hidden">
+                <div class="bg-primary bg-soft">
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="text-primary p-3">
+                                <h5 class="text-primary">Welcome Back !</h5>
+                                <p>Skote Dashboard</p>
+                            </div>
+                        </div>
+                        <div class="col-5 align-self-end">
+                            <img src="assets/images/profile-img.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="avatar-md profile-user-wid mb-4">
+                                <img src="assets/images/users/avatar-1.jpg" alt="" class="img-thumbnail rounded-circle">
+                            </div>
+                            <h5 class="font-size-15 text-truncate">Henry Price</h5>
+                            <p class="text-muted mb-0 text-truncate">UI/UX Designer</p>
+                        </div>
+
+                        <div class="col-sm-8">
+                            <div class="pt-4">
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h5 class="font-size-15">125</h5>
+                                        <p class="text-muted mb-0">Projects</p>
+                                    </div>
+                                    <div class="col-6">
+                                        <h5 class="font-size-15">$1245</h5>
+                                        <p class="text-muted mb-0">Revenue</p>
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <a href="" class="btn btn-primary btn-sm">View Profile <i
+                                            class="mdi mdi-arrow-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Social Source</h4>
+                            <div class="text-center">
+                                <div class="avatar-sm mx-auto mb-4">
+                                    <span class="avatar-title rounded-circle bg-primary bg-soft font-size-24">
+                                        <i class="mdi mdi-facebook text-primary"></i>
+                                    </span>
+                                </div>
+                                <p class="font-16 text-muted mb-2"></p>
+                                <h5><a href="javascript: void(0);" class="text-dark">Facebook - <span
+                                            class="text-muted font-16">125
+                                            sales</span> </a></h5>
+                                <p class="text-muted">Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero
+                                    venenatis
+                                    faucibus tincidunt.</p>
+                                <a href="javascript: void(0);" class="text-primary font-16">Learn more <i
+                                        class="mdi mdi-chevron-right"></i></a>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-4">
+                                    <div class="social-source text-center mt-3">
+                                        <div class="avatar-xs mx-auto mb-3">
+                                            <span class="avatar-title rounded-circle bg-primary font-size-16">
+                                                <i class="mdi mdi-facebook text-white"></i>
+                                            </span>
+                                        </div>
+                                        <h5 class="font-size-15">Facebook</h5>
+                                        <p class="text-muted mb-0">125 sales</p>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="social-source text-center mt-3">
+                                        <div class="avatar-xs mx-auto mb-3">
+                                            <span class="avatar-title rounded-circle bg-info font-size-16">
+                                                <i class="mdi mdi-twitter text-white"></i>
+                                            </span>
+                                        </div>
+                                        <h5 class="font-size-15">Twitter</h5>
+                                        <p class="text-muted mb-0">112 sales</p>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="social-source text-center mt-3">
+                                        <div class="avatar-xs mx-auto mb-3">
+                                            <span class="avatar-title rounded-circle bg-pink font-size-16">
+                                                <i class="mdi mdi-instagram text-white"></i>
+                                            </span>
+                                        </div>
+                                        <h5 class="font-size-15">Instagram</h5>
+                                        <p class="text-muted mb-0">104 sales</p>
+                                    </div>
+                                </div>
+                            </div>
+        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <div class="row">
+                <div *ngFor="let stat of statData" class="col-md-4">
+                    <app-stat [title]="stat.title" [value]="stat.value" [icon]="stat.icon"></app-stat>
+                </div>
+            </div>
+            <!-- end row -->
+                        
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Estado de Solicitudes</h4>
+                            <app-transaction [transactions]="transactions"></app-transaction>
+                            <!-- end table -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end row -->
+
+
+</div> <!-- container-fluid -->
+
+<ng-template #content let-modal>
+    <div class="modal-header border-bottom-0">
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"> </button>
+    </div>
+    <div class="modal-body">
+        <div class="text-center mb-4">
+            <div class="avatar-md mx-auto mb-4">
+                <div class="avatar-title bg-light rounded-circle text-primary h1">
+                    <i class="mdi mdi-email-open"></i>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-xl-10">
+                    <h4 class="text-primary">Subscribe !</h4>
+                    <p class="text-muted font-size-14 mb-4">Subscribe our newletter and get notification to stay update.
+                    </p>
+
+                    <div class="input-group bg-light rounded">
+                        <input type="email" class="form-control bg-transparent border-0"
+                            placeholder="Enter Email address" aria-label="Recipient's username"
+                            aria-describedby="button-addon2">
+
+                        <button class="btn btn-primary" type="button" id="button-addon2">
+                            <i class="bx bxs-paper-plane"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,85 @@
+<div class="modal-header" *ngIf="titulo">
+    <h4 class="modal-title" id="modal-basic-title">{{titulo}}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+  </div>
+  <div class="modal-body" *ngIf="titulo">
+
+    <!-- <div class="alert alert-danger" *ngIf="errors.length > 0"  role="alert">
+      <span *ngFor="let err of errors; let last = last">
+          <span [innerHTML]="'*' + err.mensaje + (last ? '' : '<br>')"></span>
+      </span>
+    </div> -->
+    <form [formGroup]="formGrupSubCate" [ngClass]="subCategoria.length < 5 ? '' : 'scroll-form'">
+      <button type="button" class="btn btn-outline-success" (click)="agregarSubCategory()">Agregar Sub
+        Categoria</button>
+      <p></p>
+      <div formArrayName="subCategoria" >
+        <div class="container">
+          <div *ngFor="let subCate of subCategoria.controls; let i = index" [formGroupName]="i">
+            <ng-container *ngIf="subCate as SubCategoriaFormGroup">
+              <div class="row d-flex justify-content-around">
+                <div class="col-md-4 mb-4">
+                  <div class="form-group">
+                    <label for="inputNombre">Sub Categoria</label>
+                    <input type="text" class="form-control text-uppercase" formControlName="subcategory_name"
+                      id="inputNombre"
+                      [ngClass]="{ 'is-invalid': submitted && SubCategoriaFormGroup.get('subcategory_name')?.invalid }" />
+                    <div *ngIf="submitted  && SubCategoriaFormGroup.get('subcategory_name')?.invalid"
+                      class="invalid-feedback">
+                      <div *ngIf="SubCategoriaFormGroup.get('subcategory_name')?.hasError('required')">Sub categoria es
+                        requerido</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Categoria</label>
+                    <div class="custom-dropdown-container">
+                      <ng-select [ngClass]="{ 'is-invalid': submitted && SubCategoriaFormGroup.get('category_id')?.invalid }" [items]="categoria"
+                        bindLabel="category_name" formControlName="category_id" placeholder="Seleccionar Categoria" bindValue="id">
+                      </ng-select>
+                      <div *ngIf="submitted && SubCategoriaFormGroup.get('category_id')?.invalid" class="invalid-feedback">
+                        <div *ngIf="SubCategoriaFormGroup.get('category_id')?.invalid">Categoria es requerido</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Tipo Sub Categoria</label>
+                    <div class="custom-dropdown-container">
+                      <ng-select [ngClass]="{ 'is-invalid': submitted && SubCategoriaFormGroup.get('type_sub_category')?.invalid }" [items]="tipoSubCategoria"
+                        bindLabel="descripcion" formControlName="type_sub_category" placeholder="Seleccionar Tipo sub categoria" bindValue="val">
+                      </ng-select>
+                      <div *ngIf="submitted && SubCategoriaFormGroup.get('type_sub_category')?.invalid" class="invalid-feedback">
+                        <div *ngIf="SubCategoriaFormGroup.get('type_sub_category')?.invalid">Tipo categoria es requerido</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="col-md-3 mb-3">
+                  <div class="form-group">
+                    <label for="inputNombre">Path</label>
+                    <input type="text" class="form-control text-uppercase" formControlName="path" id="inputNombre"/>
+                  </div>
+                </div> -->
+                <div class="d-flex justify-content-center mb-1">
+                  <div class="form-group">
+                    <button type="button" (click)="eliminar(i)" class="btn w-sm btn-sm btn-outline-danger"
+                      style="margin-top: 25px">
+                      <span><i class="fas fa-trash"></i></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="modal-footer" style="position: static;">
+      <button type="submit" class="btn btn-outline-info" (click)="onSubmit()">
+        <span *ngIf="!isLoading"> Guardar</span>
+        <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-1x"></i>
+      </button>
+    </div>

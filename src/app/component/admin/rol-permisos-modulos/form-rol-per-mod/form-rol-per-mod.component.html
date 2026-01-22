@@ -1,0 +1,81 @@
+<div class="modal-header" *ngIf="titulo">
+    <h4 class="modal-title" id="modal-basic-title">{{titulo}}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+  </div>
+  <div class="modal-body" *ngIf="titulo">
+  
+    <!-- <div class="alert alert-danger" *ngIf="errors.length > 0"  role="alert">
+      <span *ngFor="let err of errors; let last = last">
+          <span [innerHTML]="'*' + err.mensaje + (last ? '' : '<br>')"></span>
+      </span>
+    </div> -->
+    <form [formGroup]="formGrupPermissions" [ngClass]="permissions.length < 5 ? '' : 'scroll-form'">
+      <button type="button" class="btn btn-outline-success" *ngIf="!formRoleModulePermision" (click)="agregar()">Agregar Acceso</button>
+      <p></p>
+      <div formArrayName="permissions" >
+        <div class="container">
+          <div *ngFor="let perm of permissions.controls; let i = index" [formGroupName]="i">
+            <ng-container *ngIf="perm as permissionsFormGroup">
+              <div class="row d-flex justify-content-around">
+                <div class="col-md-3 mb-3">
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Perfil</label>
+                      <div class="custom-dropdown-container">
+                        <ng-select [ngClass]="{ 'is-invalid': submitted && permissionsFormGroup.get('role_id')?.invalid }" [items]="role"
+                          bindLabel="role_name" formControlName="role_id" placeholder="Seleccionar Perfil" bindValue="role_id">
+                        </ng-select>
+                        
+                        <div *ngIf="submitted && permissionsFormGroup.get('role_id')?.invalid" class="invalid-feedback">
+                          <div *ngIf="permissionsFormGroup.get('role_id')?.invalid">Perfil es requerido</div>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Modulo</label>
+                      <div class="custom-dropdown-container">
+                        <ng-select [ngClass]="{ 'is-invalid': submitted && permissionsFormGroup.get('module_id')?.invalid }" [items]="modulos"
+                          bindLabel="module_name" formControlName="module_id" placeholder="Seleccionar Modulo" bindValue="module_id">
+                        </ng-select>
+                        <div *ngIf="submitted && permissionsFormGroup.get('module_id')?.invalid" class="invalid-feedback">
+                          <div *ngIf="permissionsFormGroup.get('module_id')?.invalid">Modulo es requerido</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <div class="col-md-5 mb-3">
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Permiso</label>
+                    <div class="custom-dropdown-container">
+                      <ng-select [multiple]="true" [ngClass]="{ 'is-invalid': submitted && permissionsFormGroup.get('permission_id')?.invalid }" [items]="permisos"
+                        bindLabel="permission_name" formControlName="permission_id" placeholder="Seleccionar Permiso" bindValue="permission_id">
+                      </ng-select>
+                      <div *ngIf="submitted && permissionsFormGroup.get('permission_id')?.invalid" class="invalid-feedback">
+                        <div *ngIf="permissionsFormGroup.get('permission_id')?.invalid">Permiso es  requerido</div>
+                      
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-1 mb-3">
+                  <div class="form-group">
+                    <button type="button" (click)="eliminar(i)" class="btn btn-sm btn-outline-danger mt-4" >  <span><i class="fas fa-trash"></i></span>
+                    </button>
+                  </div>
+                </div>
+      
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="modal-footer" style="position: static;">
+      <button type="submit" class="btn btn-outline-info" (click)="onSubmit()">
+        <span *ngIf="!isLoading"> Guardar</span>
+        <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-1x"></i>
+      </button>
+    </div>

@@ -1,0 +1,199 @@
+<div class="row mb-md-2">
+  <div class="col-sm-12 col-md-6">
+    <div class="dataTables_length" id="tickets-table_length">
+      <label class="d-inline-flex align-items-center"
+        >Show
+        <select
+          name="tickets-table_length"
+          aria-controls="tickets-table"
+          name="pageSize"
+          [(ngModel)]="service.pageSize"
+          class="form-control form-control-sm mx-2"
+        >
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="25">25</option>
+          <option [ngValue]="50">50</option>
+          <option [ngValue]="100">100</option>
+        </select>
+        entries</label
+      >
+    </div>
+  </div>
+  <!-- Search -->
+  <div class="col-sm-12 col-md-6">
+    <div id="tickets-table_filter" class="dataTables_filter text-md-end">
+      <label class="d-inline-flex align-items-center"
+        >Search:
+        <input
+          type="text"
+          name="searchTerm"
+          class="form-control form-control-sm ms-2"
+          aria-controls="tickets-table"
+          [(ngModel)]="service.searchTerm"
+      /></label>
+    </div>
+  </div>
+  <!-- End search -->
+</div>
+<!-- Table -->
+<div class="table-responsive">
+  <table
+    id="basic-datatable"
+    class="table table-bordered dt-responsive nowrap datatables no-footer dtr-inline"
+  >
+    <thead>
+      <tr>
+        <th sortable="seccion" style="width: 100px" (sort)="onSort($event)">
+          Seccion
+        </th>
+        <th sortable="recojo" (sort)="onSort($event)">Recojo Despacho</th>
+        <th sortable="name" style="width: 200px" (sort)="onSort($event)">
+          Producto
+        </th>
+        <th sortable="position" (sort)="onSort($event)">Codigo</th>
+        <th sortable="position" (sort)="onSort($event)">Modelo</th>
+        <th sortable="position" (sort)="onSort($event)">Marca</th>
+        <th sortable="position" (sort)="onSort($event)">Capacidad</th>
+        <th sortable="office" (sort)="onSort($event)">Color</th>
+        <th sortable="date" (sort)="onSort($event)">Descuento</th>
+        <th sortable="salary" style="width: 200px" (sort)="onSort($event)">
+          Descripciòn
+        </th>
+        <th sortable="salary" (sort)="onSort($event)">F. Registro</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody *ngFor="let pro of lsproducto; let i = index">
+      <tr>
+        <td>
+          <ngb-highlight
+            [result]="pro.promocion"
+            [term]="service.searchTerm"
+          ></ngb-highlight>
+        </td>
+        <td>
+          <button
+            *ngIf="+pro.recojoDespacho === 0"
+            type="button"
+            class="btn d-flex btn-light-danger d-block text-danger font-medium"
+          >
+            No disponible
+          </button>
+          <button
+            type="button"
+            *ngIf="+pro.recojoDespacho === 1"
+            class="btn d-flex btn-light-success d-block text-success font-medium"
+          >
+            Disponbile
+          </button>
+        </td>
+        <td>
+          <ngb-highlight
+            [result]="pro.name"
+            [term]="service.searchTerm"
+          ></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight
+            [result]="pro.codeProduct"
+            [term]="service.searchTerm"
+          ></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight
+            [result]="pro.model"
+            [term]="service.searchTerm"
+          ></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight
+            [result]="pro.brand_name"
+            [term]="service.searchTerm"
+          ></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight
+            [result]="pro.capacidad"
+            [term]="service.searchTerm"
+          ></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight
+            [result]="pro.color"
+            [term]="service.searchTerm"
+          ></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight
+            [result]="pro.discount"
+            [term]="service.searchTerm"
+          ></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight
+            [result]="pro.description"
+            [term]="service.searchTerm"
+          ></ngb-highlight>
+        </td>
+        <td>
+          <ngb-highlight
+            [result]="pro.created_at | date : 'dd-MM-yyyy'"
+            [term]="service.searchTerm"
+          ></ngb-highlight>
+        </td>
+        <td>
+          <button
+            type="button"
+            ngbTooltip="Actualizar Producto"
+            (click)="edit(pro.id, pro.store_id)"
+            class="btn btn-outline-success btn-sm"
+          >
+            <span><i class="fas fa-edit"></i></span>
+          </button>
+          <!-- <button
+            type="button"
+            ngbTooltip="Ver Tiendas"
+            style="margin-left: 10px"
+            (click)="edit(pro.id)"
+            class="btn btn-outline-info btn-sm"
+          >
+            <span><i class="fas fa-eye"></i></span>
+          </button> -->
+
+          <!-- <button type="button" ngbTooltip="Eliminar Producto" (click)="eliminar(pro.id)"
+            class="btn btn-sm btn-outline-danger" style="margin-left: 5px">
+            <span><i class="fas fa-trash"></i></span>
+          </button> -->
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- End table -->
+<div class="row justify-content-md-between align-items-md-center mt-2">
+  <div class="col-sm-12 col-md-5">
+    <div
+      class="dataTables_info mb-2"
+      id="tickets-table_info"
+      role="status"
+      aria-live="polite"
+    >
+      Showing {{ service.startIndex }} to {{ service.endIndex }} of
+      {{ service.totalRecords }}
+      entries
+    </div>
+  </div>
+  <!-- Pagination -->
+  <div class="col-sm-12 col-md-5">
+    <div class="text-md-right float-md-end pagination-rounded">
+      <ngb-pagination
+        [collectionSize]="total$"
+        [(page)]="service.page"
+        [pageSize]="service.pageSize"
+      >
+      </ngb-pagination>
+    </div>
+  </div>
+  <!-- End Pagination -->
+</div>

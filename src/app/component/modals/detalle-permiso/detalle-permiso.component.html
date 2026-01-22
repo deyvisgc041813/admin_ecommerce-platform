@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">Ver Permisos</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+  </div>
+  <div class="modal-body">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col" sortable="name" >Permiso</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let per of data?.permisos; index as i">
+                <td scope="row">{{i + 1}}</td>
+                <td>{{per.permission_name}}</td>
+            </tr>
+        </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="getDismissReason(0)">Cerrar</button>
+  </div>

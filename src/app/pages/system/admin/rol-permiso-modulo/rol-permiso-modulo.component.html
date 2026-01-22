@@ -1,0 +1,31 @@
+<div class="container-fluid">
+    <app-page-title title="Configuración de acceso" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-7 col-md-7 mb-12 mb-md-12">
+                <h5>Historial de Permisos</h5>
+                <div class="d-flex justify-content-end">
+                  <button class="btn btn-outline-info btn-group-lg" (click)="openPermiso()">
+                    Nuevo <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+                <app-list-permission></app-list-permission>
+              </div>
+              <div class="col-5 col-md-5 mb-12 mb-md-12">
+                <h5>Historial de Accesos</h5>
+                <div class="d-flex justify-content-end">
+                  <button class="btn btn-outline-info btn-group-lg" (click)="openRolPermisoModulo()">
+                    Nuevo <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+                <app-list-rol-per-mod ></app-list-rol-per-mod>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

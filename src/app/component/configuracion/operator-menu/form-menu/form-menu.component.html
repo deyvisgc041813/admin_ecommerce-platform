@@ -1,0 +1,186 @@
+<div class="modal-header">
+    <h5 class="modal-title mt-0">{{titulo}}</h5>
+    <button type="button" class="btn-close" aria-hidden="true" (click)="getDismissReason(0)"></button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <form [formGroup]="formMenu" class="space-y-3">
+            <!-- Start Menu principal -->
+            <button type="button" class="btn btn-outline-success" *ngIf="form?.tipoMenu === 'principal'" (click)="agregarMenuPrincipal()">Agregar
+                Menu</button>
+            <button type="button" class="btn btn-outline-success" *ngIf="form?.tipoMenu === 'secundario'" (click)="agregarMenuSecundario()">Agregar
+                Menu</button>
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div formArrayName="menuPrincipal" *ngIf="form?.tipoMenu === 'principal'"
+                            [ngClass]="(menuPrincipal.length < 5)  ? '' : 'scroll-form'">
+                            <div class="container mt-2">
+                                <div *ngFor="let menu of menuPrincipal?.controls; let i = index" [formGroupName]="i">
+                                    <ng-container *ngIf="menu as menuFormGroup">
+                                        <div class="row d-flex justify-content-around">
+                                            <div class="col-md-4 mb-3">
+                                                <div class="form-group">
+                                                    <label for="inputNombre">Titulo</label>
+                                                    <input type="text" class="form-control text-uppercase"
+                                                        formControlName="titulo" id="inputNombre"
+                                                        [ngClass]="{ 'is-invalid': submitted && menuFormGroup?.get('titulo')?.invalid }" />
+                                                    <div *ngIf="submitted && menuFormGroup?.get('titulo')?.invalid"
+                                                        class="invalid-feedback">
+                                                        <div *ngIf="menuFormGroup?.get('titulo')?.hasError('required')">
+                                                            Titulo es requerido</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlTextarea1">Parametro
+                                                        de búsqueda</label>
+                                                    <ng-select [items]="lsSubCategoria" bindLabel="subcategory_name"
+                                                        placeholder="Seleccionar Parametro de búsqueda"
+                                                        formControlName="filter_parameter"
+                                                        placeholder="Seleccionar parametro de busqueda"
+                                                        bindValue="alias_subcategory"
+                                                        [ngClass]="{ 'is-invalid': submitted && menuFormGroup?.get('filter_parameter')?.invalid }">
+                                                    </ng-select>
+                                                    <div *ngIf="submitted && menuFormGroup?.get('filter_parameter')?.invalid"
+                                                        class="invalid-feedback">
+                                                        <div
+                                                            *ngIf="menuFormGroup?.get('filter_parameter')?.hasError('required')">
+                                                            Parametro de búsqueda es requerido
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <div class="form-group">
+                                                    <div class="custom-dropzone-container">
+                                                        <div class="dropzone" ngx-dropzone [multiple]="false"
+                                                            accept="image/jpeg,image/jpg,image/png,image/webp"
+                                                            (change)="onArchivoCargado($event, i)">
+                                                            <div style="font-size: 12px; font-weight: bolder; text-align: center;"
+                                                                ngx-dropzone-label
+                                                                *ngIf="!menuFormGroup?.get('archivo').value">
+                                                                Subir Imagen</div>
+                                                            <img width="100" height="50"
+                                                                [src]="menuFormGroup?.get('archivo').value ? menuFormGroup?.get('archivo').value.preview : ''"
+                                                                *ngIf="menuFormGroup?.get('archivo').value">
+
+                                                            <button *ngIf="menuFormGroup?.get('archivo').value"
+                                                                type="button" style="margin-top: -58px;
+                                                           font-size: 7px;
+                                                           margin-left: 10px;
+                                                       " class="btn btn-sm btn-outline-danger btn-delete"
+                                                                (click)="eliminarImagen(menuFormGroup)">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <button type="button" (click)="eliminarMenuPrincipal(i)"
+                                                        class="btn btn-sm btn-outline-danger" style="margin-top: 25px">
+                                                        <span><i class="fas fa-trash"></i></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <div formArrayName="menuSecundario"
+                            *ngIf="form?.tipoMenu === 'secundario'"
+                            [ngClass]="(menuSecundario.length < 5)  ? '' : 'scroll-form'">
+                            <div class="container mt-2">
+                                <div *ngFor="let menu of menuSecundario?.controls; let i = index" [formGroupName]="i">
+                                    <ng-container *ngIf="menu as menuFormSecundario">
+                                        <div class="row d-flex justify-content-around">
+                                            <div class="col-md-3 mb-2">
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlTextarea1">Categoria
+                                                        de Busqueda</label>
+                                                    <ng-select [items]="menuCategory" bindLabel="category_name"
+                                                        (change)="changeCategoriaMenu($event, i)"
+                                                        formControlName="menu_category"
+                                                        placeholder="Seleccionar Categoria" bindValue="id"
+                                                        [ngClass]="{ 'is-invalid': submitted && menuFormSecundario?.get('menu_category')?.invalid }">
+                                                    </ng-select>
+                                                    <div *ngIf="submitted && menuFormSecundario?.get('menu_category')?.invalid"
+                                                        class="invalid-feedback">
+                                                        <div
+                                                            *ngIf="menuFormSecundario?.get('menu_category')?.hasError('required')">
+                                                            Tipo de búsqueda es requerido
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <div class="form-group" ngSwitch="">
+                                                    <label for="exampleFormControlTextarea1">Parametro
+                                                        de
+                                                        búsqueda</label>
+
+                                                    <div>
+                                                        <ng-select
+                                                            [items]="menuFormSecundario.get('menuSelected').value"
+                                                            bindLabel="name"
+                                                            [multiple]="menuFormSecundario.get('isMultiple').value"
+                                                            placeholder="Seleccionar Parametro de búsqueda"
+                                                            formControlName="filter_parameter" bindValue="param_filters"
+                                                            [ngClass]="{ 'is-invalid': submitted && menuFormSecundario?.get('filter_parameter')?.invalid }">
+                                                        </ng-select>
+                                                    </div>
+                                                    <div *ngIf="submitted && menuFormSecundario?.get('filter_parameter')?.invalid"
+                                                        class="invalid-feedback">
+                                                        <div
+                                                            *ngIf="menuFormSecundario?.get('filter_parameter')?.hasError('required')">
+                                                            Parametro de búsqueda es requerido
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <div class="form-group">
+                                                    <label for="inputNombre">Descripciòn</label>
+                                                    <input type="text" class="form-control text-uppercase"
+                                                        formControlName="titulo" id="inputNombre"
+                                                        [ngClass]="{ 'is-invalid': submitted && menuFormSecundario?.get('titulo')?.invalid }" />
+                                                    <div *ngIf="submitted && menuFormSecundario?.get('titulo')?.invalid"
+                                                        class="invalid-feedback">
+                                                        <div
+                                                            *ngIf="menuFormSecundario?.get('titulo')?.hasError('required')">
+                                                            Titulo es requerido</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <button type="button" (click)="eliminarMenuSecundario(i)"
+                                                        class="btn btn-sm btn-outline-danger" style="margin-top: 25px">
+                                                        <span><i class="fas fa-trash"></i></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="form-group d-flex justify-content-end mt-2">
+            <button type="submit" class="btn btn-outline-info rounded" (click)="guardar()">
+                <span *ngIf="!isLoading">Guardar</span>
+                <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-2x"></i>
+            </button>
+        </div>
+    </div>
+</div>

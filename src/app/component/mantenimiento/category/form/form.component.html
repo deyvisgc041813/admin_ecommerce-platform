@@ -1,0 +1,42 @@
+<div class="modal-header" *ngIf="titulo">
+    <h4 class="modal-title" id="modal-basic-title">{{titulo}}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+  </div>
+  <div class="modal-body" *ngIf="titulo">
+    <form [formGroup]="formGrupCate" (ngSubmit)="onSubmit()" class="space-y-3">
+      <div class="container mt-1">
+        <div class="row">
+          <div class="col-md-6 mb-6">
+            <div class="form-group">
+              <label for="exampleInputName">Nombre Categoria</label>
+              <input type="text" formControlName="category_name" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.controls['category_name'].errors }" id="category_name"/>
+                <div *ngIf="submitted && f.controls['category_name'].errors" class="invalid-feedback">
+                 <div *ngIf="f.controls['category_name'].errors?.['required']">Nombre categoria es requerido</div>
+                </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-6">
+            <div class="form-group">
+              <label for="exampleInputPassword1">Tipo Categoria</label>
+              <div class="custom-dropdown-container">
+                <ng-select  [ngClass]="{ 'is-invalid': submitted && f.controls['type_category'].errors }" [items]="tipoCategoria"
+                  bindLabel="descripcion" formControlName="type_category" placeholder="Seleccionar Tipo categoria" bindValue="val">
+                </ng-select>
+                <div *ngIf="submitted && f.controls['type_category'].errors" class="invalid-feedback">
+                  <div *ngIf="f.controls['type_category'].errors?.['required']">Tipo categoria es requerido</div>
+                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p></p>
+      <div class="form-group d-flex justify-content-end">
+        <button type="submit" class="btn btn-outline-info rounded">
+          <span *ngIf="!isLoading">Guardar</span>
+          <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-2x"></i>
+        </button>
+      </div>
+    </form>
+  </div>

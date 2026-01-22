@@ -1,0 +1,5 @@
+export * from './components/paginacion/paginacion.component'
+export * from './ui/ui.module'
+export * from './shared.module'
+export * from './validators/validator'
+export *from './widget/widget.module'

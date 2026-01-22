@@ -1,0 +1,292 @@
+<div class="modal-header">
+  <h5 class="modal-title mt-0" style="font-size: 16px; font-weight: 500">
+    {{ titulo }}
+  </h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-hidden="true"
+    (click)="getDismissReason(0)"
+  ></button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <form [formGroup]="form" style="margin-top: 20px">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label class="control-label">Nombre</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        formControlName="nombre"
+                        placeholder="Ingrese su nombre completo"
+                        [ngClass]="{ 'is-invalid': submitted && f.nombre.errors }"
+                      />
+                      <div
+                        *ngIf="submitted && f.nombre.errors"
+                        class="invalid-feedback"
+                      >
+                        <span *ngIf="f.nombre.errors.required"
+                          >Nombre es obligatorio.</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label class="control-label">Correo</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        formControlName="correo"
+                        placeholder="Ingrese su correo o usuario"
+                        [ngClass]="{ 'is-invalid': submitted && f.correo.errors }"
+                      />
+                      <div
+                        *ngIf="submitted && f.correo.errors"
+                        class="invalid-feedback"
+                      >
+                        <span *ngIf="f.correo.errors.required">Correo es obligatorio.</span >
+                        <span *ngIf="f.correo.errors.email">Correo no tiene formato valido.</span >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6" [ngClass]="" *ngIf="!formUsers">
+                    <div class="mb-3">
+                      <label class="control-label">Contraseña</label>
+                      <input
+                        class="form-control"
+                        type="password"
+                        formControlName="clave"
+                        placeholder="Ingrese su contraseña segura"
+                        [ngClass]="{ 'is-invalid': submitted && f.clave.errors }"
+                      />
+                      <div *ngIf="submitted && f.clave.errors" class="invalid-feedback">
+                        <span *ngIf="f.clave.errors.required"
+                          >Contraseña es obligatorio.</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label class="control-label">Telefono</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        formControlName="telefono"
+                        appNumberOnly
+                        placeholder="Ingrese su numero telefonico"
+                        [ngClass]="{ 'is-invalid': submitted && f.telefono.errors }"
+                      />
+                      <div
+                        *ngIf="submitted && f.telefono.errors"
+                        class="invalid-feedback"
+                      >
+                        <span *ngIf="f.telefono.errors.required"
+                          >Telefono es obligatorio.</span
+                        >
+                        <span *ngIf="f.telefono.errors?.maxlength"
+                          >El número de teléfono debe tener exactamente 9 dígitos.</span
+                        >
+                        <span *ngIf="f.telefono.errors?.minlength"
+                          >El número de teléfono debe tener al menos 9 dígito.</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label class="control-label">Tipo documento</label>
+                      <ng-select
+                        [items]="tipoDocumento"
+                        bindLabel="descripcion"
+                        bindValue="id"
+                        [ngClass]="{
+                          'is-invalid': submitted && f.tipoDocumento.errors
+                        }"
+                        formControlName="tipoDocumento"
+                        placeholder="Seleccione tipo documento"
+                      ></ng-select>
+                      <div
+                        *ngIf="submitted && f.tipoDocumento.errors"
+                        class="invalid-feedback"
+                      >
+                        <span *ngIf="f.tipoDocumento.errors?.required"
+                          >Tipo documento es obligatorio.</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label class="control-label">Numero documento</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        formControlName="numDocumento"
+                        appNumberOnly
+                        placeholder="Ingrese su numero documento"
+                        [ngClass]="{ 'is-invalid': submitted && f.numDocumento.errors }"
+                      />
+                      <div
+                        *ngIf="submitted && f.numDocumento.errors"
+                        class="invalid-feedback"
+                      >
+                        <span *ngIf="f.numDocumento.errors.required"
+                          >Numero documento es obligatorio.</span
+                        >
+                        <!-- <span *ngIf="f.numDocumento.errors?.maxlength">El número de teléfono debe tener exactamente 9 dígitos.</span>
+                              <span *ngIf="f.numDocumento.errors?.minlength">El número de teléfono debe tener al menos 9 dígito.</span> -->
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label class="control-label">Empresa</label>
+                      <ng-select
+                        [items]="company"
+                        bindLabel="name"
+                        bindValue="company_id"
+                        [ngClass]="{
+                          'is-invalid': submitted && f.company_id.errors
+                        }"
+                        formControlName="company_id"
+                        placeholder="Seleccione tipo documento"
+                      ></ng-select>
+                      <div
+                        *ngIf="submitted && f.company_id.errors"
+                        class="invalid-feedback"
+                      >
+                        <span *ngIf="f.company_id.errors?.required"
+                          >Empresa es obligatorio.</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label class="control-label">Seleccione perfil</label>
+                      <ng-select
+                        [items]="role"
+                        bindLabel="role_name"
+                        bindValue="role_id"
+                        [ngClass]="{ 'is-invalid': submitted && f.role_id.errors }"
+                        formControlName="role_id"
+                        placeholder="Seleccione un perfil"
+                      ></ng-select>
+                      <div
+                        *ngIf="submitted && f.role_id.errors"
+                        class="invalid-feedback"
+                      >
+                        <span *ngIf="f.role_id.errors?.required"
+                          >El perfil es requerido.</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="mb-3">
+                      <label for="formmessage">Correo Personal</label>
+                      <input
+                        class="form-control"
+                        type="text"
+                        formControlName="personal_email"
+                        placeholder="Ingrese su correo Personal"
+                        [ngClass]="{
+                          'is-invalid': submitted && f.personal_email.errors
+                        }"
+                      />
+                      <div
+                        *ngIf="submitted && f.personal_email.errors"
+                        class="invalid-feedback"
+                      >
+                        <span *ngIf="f.personal_email.errors.required"
+                          >Correo personal es obligatorio.</span
+                        >
+                        <span *ngIf="f.personal_email.errors.email"  >Correo personal no tiene formato valido.</span >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-end">
+              <button
+                type="button"
+                (click)="guardar()"
+                class="btn btn-success"
+                id="btn-save-event"
+                [disabled]="isLoading"
+              >
+                <span *ngIf="isLoading"
+                  ><i class="bx bx-hourglass bx-spin mr-2"></i
+                ></span>
+                <span *ngIf="!isLoading">Guardar</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Tab Content -->
+<!-- <ng-template #datosPersonales>
+
+</ng-template> -->
+<!-- Tab Content -->
+<!-- <ng-template #permisos>
+  <div *ngFor="let item of modulos" class="module-container">
+    <div class="module-header" (click)="toggleParent(item)">
+      <span>{{ item.module_name }}</span>
+      <i [ngClass]="item.open ? 'fa fa-chevron-up' : 'fa fa-chevron-down'"></i>
+    </div>
+
+    <div *ngIf="item.open" class="module-content">
+      <div class="card">
+        <div class="card-body">
+          <div class="permissions-grid">
+            <div *ngFor="let menu of item.permisos" class="permission-card">
+              <div class="icon-container">
+                <i
+                  [ngClass]="getIconClass(menu.permission_name)"
+                  class="permission-icon"
+                ></i>
+              </div>
+              <div class="permission-info">
+                <span class="permission-title">{{ menu.permission_name }}</span>
+              </div>
+              <div class="switch-container">
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="menu.checked"
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="select-all">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              [(ngModel)]="item.selectAllChecked"
+              (change)="selectAllPermissions(item)"
+            />
+            <label class="form-check-label">Seleccionar Todo</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+ -->

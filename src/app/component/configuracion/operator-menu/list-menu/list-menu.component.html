@@ -1,0 +1,137 @@
+<div class="container-fluid">
+
+  <app-page-title title="Profile" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+
+  <div class="row">
+    <div class="col-xl-4">
+      <!-- end card -->
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title mb-4">Informaciòn General</h4>
+
+          <p class="text-muted mb-4">Menus del sistema oinline de ventas de la ferreteria RYD INVERSIONES.</p>
+          <div class="table-responsive">
+            <table class="table table-nowrap mb-0">
+              <tbody>
+                <tr>
+                  <th scope="row">Titulo del Menu :</th>
+                  <td>{{menu?.general?.category_name}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Parametro de Filtro :</th>
+                  <td>{{menu?.general?.category_alias}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Estado :</th>
+                  <td>Activo</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="mt-4 d-flex justify-content-center">
+              <a href="" class="btn btn-primary btn-sm" style="margin-left: 10px;">Actualizar <i
+                  class="fas fa-edit ms1"></i></a>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end card -->
+    </div>
+
+    <div class="col-xl-8">
+
+      <div class="row">
+        <div *ngFor="let stat of statData" class="col-md-4">
+        </div>
+
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-end">
+            <a href="javascript: void(0);" class="btn btn-primary btn-sm">Nuevo <i class="fas fa-plus"></i></a>
+          </div>
+          <h4 class="card-title mb-4">Sub Menu Principal</h4>
+
+          <div class="table-responsive">
+            <table class="table table-nowrap table-hover mb-0">
+              <thead>
+                <tr>
+                  <!-- <th scope="col">#</th> -->
+                  <th scope="col">Descripciòn</th>
+                  <th scope="col">Categoria</th>
+                  <th scope="col">Filtro de Parametro</th>
+                  <th scope="col">Imagen</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let me of menu?.menuPrincipal;let i=index">
+                  <!-- <th scope="row">{{i + 1}}</th> -->
+                  <td>{{me?.descripcion}}</td>
+                  <td>{{me?.category_alias}}</td>
+                  <td>{{me?.filter_parameter}}</td>
+                  <td> <img src="{{me.image}}" alt class="avatar-sm" /></td>
+                  <td>
+                    <!-- <button type="button" ngbTooltip="Actualizar" (click)="edit(me.id)"
+                      class="btn btn-outline-success btn-sm" style="margin-left: 5px">
+                      <span><i class="fas fa-edit"></i></span>
+                    </button> -->
+                    <button type="button" ngbTooltip="Eliminar" (click)="eliminar(me.id, 'principal')"
+                      class="btn btn-sm btn-outline-danger" style="margin-left: 5px">
+                      <span><i class="fas fa-trash"></i></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-end">
+            <a href="javascript: void(0);" class="btn btn-primary btn-sm">Nuevo <i class="fas fa-plus"></i></a>
+
+          </div>
+
+          <h4 class="card-title mb-4">Sub Menu Secundario</h4>
+          <div class="table-responsive">
+            <table class="table table-nowrap table-hover mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">Descripcion de Filtros</th>
+                  <th scope="col">Menu</th>
+                  <th scope="col">Categoria</th>
+                  <th scope="col">Filtro de Parametro</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let me of menu?.menuSecundario;let i=index">
+                  <td>{{me?.category_name}}</td>
+                  <td>{{me?.descripcion}}</td>
+                  <td>{{me?.category_alias}}</td>
+                  <td>{{me?.filter_parameter}}</td>
+          
+                  <td>
+                    <!-- <button type="button" ngbTooltip="Actualizar" (click)="edit(me.id)"
+                      class="btn btn-outline-success btn-sm" style="margin-left: 5px">
+                      <span><i class="fas fa-edit"></i></span>
+                    </button> -->
+                    <button type="button" ngbTooltip="Eliminar" (click)="eliminar(me.id, 'secundario')"
+                      class="btn btn-sm btn-outline-danger" style="margin-left: 5px">
+                      <span><i class="fas fa-trash"></i></span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <app-pagination [totalItems]="totalElements" [pageSize]="pageSize" [currentPage]="pageNumber"
+              (pageChange)="onPageChange($event)">
+            </app-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end row -->
+</div>
