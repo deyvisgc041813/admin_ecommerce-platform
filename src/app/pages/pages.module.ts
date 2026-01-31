@@ -37,6 +37,8 @@ import { ProfileComponent } from './system/admin/profile/profile.component';
 import { RoleAndModulesComponent } from './system/admin/role-and-modules/role-and-modules.component';
 import { RolPermisoModuloComponent } from './system/admin/rol-permiso-modulo/rol-permiso-modulo.component';
 import { ServiceConfigurationsComponent } from './system/configuracion/service-configurations/service-configurations.component';
+import { WhatsappComponent } from './system/configuracion/whatsapp/whatsapp.component';
+import { WebsocketService } from '@rdinvesiones/core/services/system/websocket.service';
 
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
@@ -48,7 +50,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
 @NgModule({
   declarations: [CategoryComponent, ProductComponent, SubcategriesComponent,
      OperatorMenuComponent, MenuComponent, CompanyComponent, CompanySedesComponent, 
-     BannerComponent, VentasComponent, BrandComponent, AdminComponent, ProfileComponent, RoleAndModulesComponent, RolPermisoModuloComponent, ServiceConfigurationsComponent],
+     BannerComponent, VentasComponent, BrandComponent, AdminComponent, ProfileComponent, RoleAndModulesComponent, RolPermisoModuloComponent, 
+     ServiceConfigurationsComponent, WhatsappComponent],
   imports: [
     ComponentModule,
     CommonModule,
@@ -72,6 +75,6 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     LightboxModule,
 
     NgSelectModule // borrar esto
-  ],
+  ]
 })
 export class PagesModule { }

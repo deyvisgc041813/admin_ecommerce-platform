@@ -99,6 +99,13 @@ export const MENU: MenuItem[] = [
           link: "/configuration-service",
           parentId: 4,
         },
+        {
+          id: 6,
+          label: "Integración de WhatsApp",
+          link: "/integrations-whatsapp",
+          parentId: 4,
+        },
+        
       ],
       
   },

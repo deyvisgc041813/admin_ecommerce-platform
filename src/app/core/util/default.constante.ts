@@ -166,15 +166,15 @@ export class DataDefault {
 
   public static readonly TIPO_DOCUMENTO: any[] = [
     {
-      id: 1,
+      id: "dni",
       descripcion: "DNI",
     },
     {
-      id: 2,
+      id: "carnet extranjeria",
       descripcion: "Carnet de Extranjeria",
     },
     {
-      id: 3,
+      id: "ruc",
       descripcion: "Ruc",
     },
   ];
@@ -237,5 +237,15 @@ export class DataDefault {
     { value: "STORAGE", label: "Almacenamiento" },
     { value: "WEBHOOK", label: "Webhooks" },
     { value: "API Externa", label: "API Externa" },
+  ];
+  public static readonly TIPOS_PAGO = [
+    {
+      value: "card",
+      label: "Tarjeta de crédito / débito",
+    },
+    {
+      value: "yape",
+      label: "Yape",
+    },
   ];
 }

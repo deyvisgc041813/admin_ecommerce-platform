@@ -30,6 +30,7 @@ export class FormConfigurationComponent implements OnInit {
   isLoading: boolean = false;
   formGrupConfig: FormGroup;
   tipoServicio: any = [];
+  tipoPago: any = [];
   companys: Company[];
   constructor(
     private formBuilder: FormBuilder,
@@ -42,6 +43,7 @@ export class FormConfigurationComponent implements OnInit {
     config.backdrop = "static";
     config.keyboard = false;
     this.tipoServicio = DataDefault.TIPO_SERVICIO;
+    this.tipoPago = DataDefault.TIPOS_PAGO
     this.validateForm();
   }
   ngOnInit(): void {
@@ -78,6 +80,7 @@ export class FormConfigurationComponent implements OnInit {
       this.formBuilder.group({
         name_url: ["", Validators.required],
         endpoint_url: ["", Validators.required],
+        type_pago: [""]
       }),
     );
   }
@@ -221,6 +224,7 @@ export class FormConfigurationComponent implements OnInit {
         this.formBuilder.group({
           name_url: [url.name_url || "", Validators.required],
           endpoint_url: [url.endpoint_url || "", Validators.required],
+          type_pago: [url.type_pago || ""],
         }),
       );
     });

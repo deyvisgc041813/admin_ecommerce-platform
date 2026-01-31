@@ -31,4 +31,7 @@ export class UriConstante {
     environment.API_BASE_URL.replace("api/v1/admin/", "") + "province";
   public static readonly DISTRITO_RESOURCE =
     environment.API_BASE_URL.replace("api/v1/admin/", "") + "district";
+  public static readonly URL_API_SAVE_SESSION_WHATSSAP = environment.hostwhassatp + "sessions/start"
+  public static readonly URL_API_GET_STATUS_WHATSSAP = environment.hostwhassatp  + "sessions/status-connect"
+  public static readonly URL_API_GET_OBTENER_QR_WHATSSAP = environment.hostwhassatp  + "sessions/qr"
 }

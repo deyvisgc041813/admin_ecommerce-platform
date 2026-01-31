@@ -18,6 +18,7 @@ import { RoleAndModulesComponent } from './system/admin/role-and-modules/role-an
 import { RolPermisoModuloComponent } from './system/admin/rol-permiso-modulo/rol-permiso-modulo.component';
 import { AuthGuard } from '../core';
 import { ServiceConfigurationsComponent } from './system/configuracion/service-configurations/service-configurations.component';
+import { WhatsappComponent } from './system/configuracion/whatsapp/whatsapp.component';
 
 const rol = [
   "RESPONSABLE"
@@ -29,11 +30,13 @@ const routes: Routes = [
   { path: 'tables', loadChildren: () => import('./tables/tables.module').then(m => m.TablesModule) },
   { path: 'charts', loadChildren: () => import('./chart/chart.module').then(m => m.ChartModule) },
   { path: "profile", loadChildren:() => import('./profile/profile.module').then(m=> m.ProfileModule)},
+
   { path: 'product', component: ProductComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
   { path: 'category', component: CategoryComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
   { path: 'subcategory', component: SubcategriesComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']} },
   { path: 'menu-home', component: MenuComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']} },
   { path: 'configuration-service', component: ServiceConfigurationsComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']} },
+  { path: 'integrations-whatsapp', component: WhatsappComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
   { path: 'store-oinline-menu/:id', component: OperatorMenuComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']} },
   { path: 'company', component: CompanyComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']} },
   { path: 'tiendas', component: CompanySedesComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']} },
@@ -44,7 +47,7 @@ const routes: Routes = [
   { path: 'admin-profile', component: ProfileComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
   { path: 'admin-roles-and-modules', component: RoleAndModulesComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
   { path: 'admin-role-modules-permissions', component: RolPermisoModuloComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
-  
+
 ];
 
 @NgModule({

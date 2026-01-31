@@ -157,7 +157,7 @@
                   >
                     <ng-container *ngIf="url as UrlsFormGroup">
                       <div class="row d-flex justify-content-around">
-                      <div class="col-md-4 mb-4">
+                      <div class="col-md-3 mb-4">
                         <div class="form-group">
                           <label for="inputNombre">Nombre Url</label>
                           <input
@@ -174,7 +174,17 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-7 mb-4">
+                      <div class="col-md-4 mb-4">
+                      <label for="inputNombre">Tipo Pago</label>
+                      <ng-select
+                        [items]="tipoPago"
+                        bindLabel="label"
+                        bindValue="value"
+                        formControlName="type_pago"
+                        placeholder="Seleccione tipo pago"
+                      ></ng-select>
+                      </div>
+                      <div class="col-md-4 mb-4">
                         <div class="form-group">
                           <label for="inputNombre">url</label>
                           <input
@@ -203,9 +213,6 @@
                             </button>
                           </div>
                         </div>
-                        <!-- <div class="d-flex justify-content-center mb-1">
-         
-                        </div> -->
                       </div>
                     </ng-container>
                   </div>

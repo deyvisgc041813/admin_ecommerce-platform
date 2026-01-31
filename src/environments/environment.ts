@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   defaultauth: 'fackbackend',
   API_BASE_URL: 'http://localhost:3000/api/v1/admin/',
-  hostwhassatp: 'http://127.0.0.1:8001/',
+  hostwhassatp: 'http://localhost:8001/api/v1/',
 };
 
 
