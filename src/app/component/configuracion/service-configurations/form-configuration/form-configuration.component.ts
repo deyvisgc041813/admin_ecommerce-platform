@@ -30,7 +30,7 @@ export class FormConfigurationComponent implements OnInit {
   isLoading: boolean = false;
   formGrupConfig: FormGroup;
   tipoServicio: any = [];
-  tipoPago: any = [];
+  tiposServicioUrl: any = [];
   companys: Company[];
   constructor(
     private formBuilder: FormBuilder,
@@ -43,7 +43,7 @@ export class FormConfigurationComponent implements OnInit {
     config.backdrop = "static";
     config.keyboard = false;
     this.tipoServicio = DataDefault.TIPO_SERVICIO;
-    this.tipoPago = DataDefault.TIPOS_PAGO
+    this.tiposServicioUrl = DataDefault.TIPOS_SERVICIO_URL
     this.validateForm();
   }
   ngOnInit(): void {
@@ -80,7 +80,7 @@ export class FormConfigurationComponent implements OnInit {
       this.formBuilder.group({
         name_url: ["", Validators.required],
         endpoint_url: ["", Validators.required],
-        type_pago: [""]
+        type_servicio_url: [""]
       }),
     );
   }
@@ -137,6 +137,7 @@ export class FormConfigurationComponent implements OnInit {
     });
   } else {
     // UPDATE
+    console.log("data ", data)
     this.configurationService
       .update(this.formConfig.configuration_id, data)
       .subscribe({
@@ -224,7 +225,7 @@ export class FormConfigurationComponent implements OnInit {
         this.formBuilder.group({
           name_url: [url.name_url || "", Validators.required],
           endpoint_url: [url.endpoint_url || "", Validators.required],
-          type_pago: [url.type_pago || ""],
+          type_servicio_url: [url.type_servicio_url || ""],
         }),
       );
     });

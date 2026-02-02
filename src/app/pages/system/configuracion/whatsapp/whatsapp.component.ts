@@ -7,10 +7,11 @@ import {
 } from "@angular/forms";
 import { DomSanitizer } from "@angular/platform-browser";
 import { WhatssapssRequest } from "@rdinvesiones/core/interface/whatssapp.request";
+import { ConfigurationsService } from "@rdinvesiones/core/services/system/configurations.service";
 import { WhatssapService } from "@rdinvesiones/core/services/system/whatssapp.service";
 import { ToastrService } from "ngx-toastr";
 import { Observable } from "rxjs";
-import { TokenService } from "src/app/core";
+import { EESTADO, TokenService } from "src/app/core";
 export interface WhatssappConfig {
   isConnect: any;
   sessionId: string;
@@ -45,50 +46,31 @@ export class WhatsappComponent implements OnInit {
   status = "";
   configWhatssap: WhatssappConfig = {
     isConnect: false,
-    sessionId: ""
+    sessionId: "",
   };
+  private statusUpdated = false;
   constructor(
     private formBuilder: FormBuilder,
     public whatssapService: WhatssapService,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
     private tokenService: TokenService,
+    private configurationService: ConfigurationsService,
   ) {
     this.KEY_SESSION_WHATSAPP = "session";
     const session = this.getStorageSession() as WhatssappConfig | null;
     this.configWhatssap.sessionId = session?.sessionId ?? "rydinversiones";
     this.configWhatssap.isConnect = session?.isConnect ?? false;
-    if(!this.configWhatssap.isConnect) this.generateSession();
+    if (!this.configWhatssap.isConnect) this.generateSession();
   }
 
   ngOnInit(): void {
-
     this.whatssapService.listen(this.configWhatssap.sessionId);
-    this.getObtenerQr()
-    this.getStatusConnect()
+    this.getObtenerQr();
+    this.getStatusConnect();
   }
 
-  generateSession() {
-    const request: WhatssapssRequest = {
-      sessionId: this.sessionWhatsapp,
-      //number: this.formGrup.value.celular.replace(/\s/g, "")
-    };
-    this.whatssapService.generate(request).subscribe(
-      (res) => {
-        if (res.ok) {
-          this.toastr.success(res.message, "Exito!");
-          this.addStorageSession();
-          //this.qrBase64 = this.sanitizer.bypassSecurityTrustResourceUrl(`${res.data.qr}`);
-        } else {
-          console.log("res ", res);
-          this.toastr.error(res.message, "Error!");
-        }
-      },
-      (error) => {
-        this.toastr.error(error.message, "Error!");
-      },
-    );
-  }
+
   addStorageSession() {
     sessionStorage.setItem(
       this.KEY_SESSION_WHATSAPP,
@@ -97,7 +79,6 @@ export class WhatsappComponent implements OnInit {
   }
   getStorageSession(): WhatssappConfig | null {
     const session = sessionStorage.getItem(this.KEY_SESSION_WHATSAPP);
-
     if (!session || session === "undefined") {
       return null;
     }
@@ -110,14 +91,18 @@ export class WhatsappComponent implements OnInit {
       return null;
     }
   }
-
   getStatusConnect() {
     this.whatssapService.getStatus().subscribe((status) => {
-      //console.log("status ", status)
+      console.log("status ", status)
       if (status === "connected") {
+        if (this.statusUpdated) return;
         this.configWhatssap.isConnect = true;
-      } else if(status === "closed" || status === "waiting_qr") {
+        this.updateConnectWhatsapp(EESTADO.ACTIVE, this.configWhatssap.sessionId)
+        this.statusUpdated = true
+      } else if (status === "closed") { //|| status === "waiting_qr"
         this.configWhatssap.isConnect = false;
+        this.statusUpdated = false
+        this.updateConnectWhatsapp(EESTADO.INACTIVE, this.configWhatssap.sessionId)
       }
       this.addStorageSession();
     });
@@ -125,49 +110,60 @@ export class WhatsappComponent implements OnInit {
   getObtenerQr() {
     this.whatssapService.getQR().subscribe((qr) => {
       this.qr = qr;
+  
     });
   }
-  // setearDevice(res) {
-  //     this.isQrConnect = true
-  //     this.isQr = true
-  //     this.device.session = res.session
-  //     this.device.number = res.number
-  //     this.device.status = res.status
-  // }
-  // addMesage() {
-  //   this.whatssapService.getMessaje$().subscribe(res => {
-  //     this.getObtenerQr()
-  //     // console.log("res", res)
-  //     // if(res && res.type === "connected") {
-  //     //   this.isQr = true
-  //     //   this.isQrConnect = true
-  //     //   this.tokenService.saveTokenApi(res.token)
-
-  //     // } else {
-  //     //   this.isQr = false
-  //     //   this.isQrConnect = false
-  //     //   this.device.session = "",
-  //     //   this.device.number = ""
-  //     //   this.device.status = "disconnected"
-  //     // }
-  //   });
-  // }
-  // getMessage() {
-  //   this.whatssapService.getMessaje$().subscribe(res => {
-  //     this.getObtenerQr()
-  //     // console.log("res", res)
-  //     // if(res && res.type === "connected") {
-  //     //   this.isQr = true
-  //     //   this.isQrConnect = true
-  //     //   this.tokenService.saveTokenApi(res.token)
-
-  //     // } else {
-  //     //   this.isQr = false
-  //     //   this.isQrConnect = false
-  //     //   this.device.session = "",
-  //     //   this.device.number = ""
-  //     //   this.device.status = "disconnected"
-  //     // }
-  //   });
-  // }
+  updateConnectWhatsapp(connect: string, session:string) {
+    const data = this.tokenService.decodeToken();
+    const companyId = data?.user?.company_id ?? data?.company_id;
+    return this.configurationService.updateConnectWhatsapp(companyId, connect, session).subscribe({
+      next: (res: any) => {
+        this.toastr.success(res.message, "Exito!");
+        if(connect === EESTADO.INACTIVE) {
+          this.generateSession()
+        }
+      },
+      error: (err: any) => {
+        this.toastr.success(err.message, "Error!");
+      },
+      complete: () => {
+      },
+    });
+  }
+  updateSessionWhatsapp(session:string) {
+    const data = this.tokenService.decodeToken();
+    const companyId = data?.user?.company_id ?? data?.company_id;
+    return this.configurationService.updateSessionWhatsapp(companyId, session).subscribe({
+      next: (res: any) => {
+        this.toastr.success(res.message, "Exito!");
+      },
+      error: (err: any) => {
+        this.toastr.success(err.message, "Error!");
+      },
+      complete: () => {
+      },
+    });
+  }
+    generateSession() {
+    const request: WhatssapssRequest = {
+      sessionId: this.sessionWhatsapp,
+      //number: this.formGrup.value.celular.replace(/\s/g, "")
+    };
+    this.whatssapService.generate(request).subscribe(
+      (res) => {
+        if (res.ok) {
+          this.toastr.success(res.message, "Exito!");
+          this.addStorageSession();
+          this.updateSessionWhatsapp(request.sessionId)
+          //this.qrBase64 = this.sanitizer.bypassSecurityTrustResourceUrl(`${res.data.qr}`);
+        } else {
+          console.log("res ", res);
+          this.toastr.error(res.message, "Error!");
+        }
+      },
+      (error) => {
+        this.toastr.error(error.message, "Error!");
+      },
+    );
+  }
 }

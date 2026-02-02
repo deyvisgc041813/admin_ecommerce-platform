@@ -233,12 +233,14 @@ export class DataDefault {
     { value: "PAYMENT", label: "Pagos" },
     { value: "EMAIL", label: "Correos" },
     { value: "API", label: "API Externa" },
+    { value: "WHATSAPP_API", label: "WhatsApp API" },
     { value: "SMS", label: "Mensajería SMS" },
     { value: "STORAGE", label: "Almacenamiento" },
     { value: "WEBHOOK", label: "Webhooks" },
-    { value: "API Externa", label: "API Externa" },
+    { value: "EXTERNAL_API", label: "API Externa" },
+
   ];
-  public static readonly TIPOS_PAGO = [
+  public static readonly TIPOS_SERVICIO_URL = [
     {
       value: "card",
       label: "Tarjeta de crédito / débito",
@@ -246,6 +248,10 @@ export class DataDefault {
     {
       value: "yape",
       label: "Yape",
+    },
+    {
+      value: "whatsapp",
+      label: "Api de Whatsapp",
     },
   ];
 }
