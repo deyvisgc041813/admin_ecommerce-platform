@@ -238,7 +238,6 @@ export class DataDefault {
     { value: "STORAGE", label: "Almacenamiento" },
     { value: "WEBHOOK", label: "Webhooks" },
     { value: "EXTERNAL_API", label: "API Externa" },
-
   ];
   public static readonly TIPOS_SERVICIO_URL = [
     {
@@ -254,4 +253,84 @@ export class DataDefault {
       label: "Api de Whatsapp",
     },
   ];
+  public static readonly TIPOPAGO_ORDER = {
+    card: { label: "Compra con tarjeta", class: "badge bg-success" },
+    yape: { label: "Yape", class: "badge bg-primary" },
+    bank_transfer: { label: "Transferencia", class: "badge bg-info" },
+  };
+
+  public static readonly TIPOOPERACION_ORDER = {
+    0: { label: "Reserva", class: "badge bg-info", identifier: "0" },
+    1: { label: "Compra", class: "badge bg-primary", identifier: "1" },
+  };
+  public static readonly ESTADO_ORDER = {
+    pending_payment: {
+      label: "Pendiente de pago",
+      class: "badge bg-warning",
+      key: "pending_payment",
+      identifier: "pending_payment",
+    },
+
+    pending_transfer_validation: {
+      label: "Validando transferencia",
+      class: "badge bg-warning",
+      key: "pending_transfer_validation",
+      identifier: "pending_transfer_validation",
+    },
+
+    paid: {
+      label: "Pagado",
+      class: "badge bg-success",
+      key: "paid",
+      identifier: "paid",
+    },
+
+    processing: {
+      label: "En proceso",
+      class: "badge bg-info",
+      key: "processing",
+      identifier: "processing",
+    },
+
+    shipped: {
+      label: "Enviado",
+      class: "badge bg-primary",
+      key: "shipped",
+      identifier: "shipped",
+    },
+
+    delivered: {
+      label: "Entregado",
+      class: "badge bg-success",
+      key: "delivered",
+      identifier: "delivered",
+    },
+
+    cancelled: {
+      label: "Cancelado",
+      class: "badge bg-danger",
+      key: "cancelled",
+      identifier: "cancelled",
+    },
+
+    rejected: {
+      label: "Rechazado",
+      class: "badge bg-danger",
+      key: "rejected",
+      identifier: "rejected",
+    },
+
+    refunded: {
+      label: "Reembolsado",
+      class: "badge bg-secondary",
+      key: "refunded",
+      identifier: "refunded",
+    },
+    reserved: {
+      label: "Reservado",
+      class: "badge bg-dark",
+      key: "reserved",
+      identifier: "reserved",
+    },
+  };
 }

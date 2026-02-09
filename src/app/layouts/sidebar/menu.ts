@@ -111,13 +111,13 @@ export const MENU: MenuItem[] = [
   },
   {
     id: 5,
-    label: "Ventas",
+    label: "Comercial",
     icon: "bx bxs-user-plus",
     subItems: [
       {
         id: 1,
-        label: "Lista",
-        link: "/ventas",
+        label: "Pedidos",
+        link: "/order",
         parentId: 5,
       }
     ],

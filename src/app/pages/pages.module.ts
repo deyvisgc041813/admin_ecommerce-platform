@@ -23,7 +23,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CompanyComponent } from './system/configuracion/company/company.component';
 import { CompanySedesComponent } from './system/configuracion/company-sedes/company-sedes.component';
 import { BannerComponent } from './system/configuracion/ecomerce/banner/banner.component';
-import { VentasComponent } from './system/ventas/ventas.component';
+
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CategoryComponent } from './system/mantenimiento/category/category.component';
 import { ProductComponent } from './system/mantenimiento/product/product.component';
@@ -39,6 +39,7 @@ import { RolPermisoModuloComponent } from './system/admin/rol-permiso-modulo/rol
 import { ServiceConfigurationsComponent } from './system/configuracion/service-configurations/service-configurations.component';
 import { WhatsappComponent } from './system/configuracion/whatsapp/whatsapp.component';
 import { WebsocketService } from '@rdinvesiones/core/services/system/websocket.service';
+import { PedidosComponent } from './system/comercial/pedidos/pedidos.component';
 
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
@@ -50,8 +51,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
 @NgModule({
   declarations: [CategoryComponent, ProductComponent, SubcategriesComponent,
      OperatorMenuComponent, MenuComponent, CompanyComponent, CompanySedesComponent, 
-     BannerComponent, VentasComponent, BrandComponent, AdminComponent, ProfileComponent, RoleAndModulesComponent, RolPermisoModuloComponent, 
-     ServiceConfigurationsComponent, WhatsappComponent],
+     BannerComponent, BrandComponent, AdminComponent, ProfileComponent, RoleAndModulesComponent, RolPermisoModuloComponent, 
+     ServiceConfigurationsComponent, WhatsappComponent, PedidosComponent],
   imports: [
     ComponentModule,
     CommonModule,

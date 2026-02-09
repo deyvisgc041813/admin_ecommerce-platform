@@ -31,7 +31,7 @@ export class OrderService {
     this.isRegisterOrUpdate$.next(status);
   }
   get(): Observable<ListPage> {
-    return this.http.get<ListPage>(UriConstante.ORDER_RESOURCE + "/");
+    return this.http.get<ListPage>(UriConstante.ORDER_RESOURCE);
   }
   registerSede(form: Sede): Observable<ResponseMessage> {
     return this.http.post<ResponseMessage>(UriConstante.ORDER_RESOURCE + "/register-sede", form);

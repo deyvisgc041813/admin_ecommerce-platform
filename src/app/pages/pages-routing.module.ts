@@ -10,7 +10,6 @@ import { SubcategriesComponent } from './system/mantenimiento/subcategries/subca
 import { OperatorMenuComponent } from './system/configuracion/operator-menu/operator-menu.component';
 import { MenuComponent } from './system/configuracion/menu/menu.component';
 import { CategoryComponent } from './system/mantenimiento/category/category.component';
-import { VentasComponent } from './system/ventas/ventas.component';
 import { BrandComponent } from './system/mantenimiento/brand/brand.component';
 import { AdminComponent } from './system/admin/admin.component';
 import { ProfileComponent } from './system/admin/profile/profile.component';
@@ -19,6 +18,7 @@ import { RolPermisoModuloComponent } from './system/admin/rol-permiso-modulo/rol
 import { AuthGuard } from '../core';
 import { ServiceConfigurationsComponent } from './system/configuracion/service-configurations/service-configurations.component';
 import { WhatsappComponent } from './system/configuracion/whatsapp/whatsapp.component';
+import { PedidosComponent } from './system/comercial/pedidos/pedidos.component';
 
 const rol = [
   "RESPONSABLE"
@@ -41,7 +41,7 @@ const routes: Routes = [
   { path: 'company', component: CompanyComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']} },
   { path: 'tiendas', component: CompanySedesComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']} },
   { path: 'banner', component: BannerComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']} },
-  { path: 'ventas', component: VentasComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
+  { path: 'order', component: PedidosComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
   { path: 'brand', component: BrandComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
   { path: 'admin-users', component: AdminComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
   { path: 'admin-profile', component: ProfileComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
