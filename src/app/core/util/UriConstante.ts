@@ -2,13 +2,18 @@ import { environment } from "src/environments/environment";
 export class UriConstante {
   public static readonly URL_UPLOAD_FILE_DEFAULT =
     environment.API_BASE_URL + "file_model";
-  public static readonly AUTHENTICATION_RESOURCE = environment.API_BASE_URL + "authentication";
+  public static readonly AUTHENTICATION_RESOURCE =
+    environment.API_BASE_URL + "authentication";
   public static readonly USERS_RESOURCE = environment.API_BASE_URL + "users";
-  public static readonly PERMISSIONS_RESOURCE = environment.API_BASE_URL + "permissions";
-  public static readonly MODULES_RESOURCE = environment.API_BASE_URL + "modules";
+  public static readonly PERMISSIONS_RESOURCE =
+    environment.API_BASE_URL + "permissions";
+  public static readonly MODULES_RESOURCE =
+    environment.API_BASE_URL + "modules";
   public static readonly ROLES_RESOURCE = environment.API_BASE_URL + "role";
-  public static readonly ROLES_PERMISSIONS_MODULES_RESOURCE = environment.API_BASE_URL + "role_permissions_modules";
-  public static readonly ROLES_MODULES_RESOURCE = environment.API_BASE_URL + "roles_modules";
+  public static readonly ROLES_PERMISSIONS_MODULES_RESOURCE =
+    environment.API_BASE_URL + "role_permissions_modules";
+  public static readonly ROLES_MODULES_RESOURCE =
+    environment.API_BASE_URL + "roles_modules";
   public static readonly PRODUCT_RESOURCE =
     environment.API_BASE_URL + "product";
   public static readonly MENU_RESOURCE = environment.API_BASE_URL + "menu";
@@ -17,11 +22,14 @@ export class UriConstante {
   public static readonly CATEGORY_RESOURCE =
     environment.API_BASE_URL + "category";
   public static readonly BRAND_RESOURCE = environment.API_BASE_URL + "brand";
-    public static readonly CONFIGURATIONS_RESOURCE = environment.API_BASE_URL + "configurations";
+  public static readonly CONFIGURATIONS_RESOURCE =
+    environment.API_BASE_URL + "configurations";
   public static readonly COMPANY_RESOURCE =
     environment.API_BASE_URL + "company";
   public static readonly SEDE_RESOURCE = environment.API_BASE_URL + "sede";
   public static readonly ORDER_RESOURCE = environment.API_BASE_URL + "order";
+  public static readonly PAYMENT_RESOURCE =
+    environment.API_BASE_URL + "payment";
   public static readonly SUBCATEGORY_RESOURCE =
     environment.API_BASE_URL + "subCategory";
 
@@ -31,7 +39,10 @@ export class UriConstante {
     environment.API_BASE_URL.replace("api/v1/admin/", "") + "province";
   public static readonly DISTRITO_RESOURCE =
     environment.API_BASE_URL.replace("api/v1/admin/", "") + "district";
-  public static readonly URL_API_SAVE_SESSION_WHATSSAP = environment.hostwhassatp + "sessions/start"
-  public static readonly URL_API_GET_STATUS_WHATSSAP = environment.hostwhassatp  + "sessions/status-connect"
-  public static readonly URL_API_GET_OBTENER_QR_WHATSSAP = environment.hostwhassatp  + "sessions/qr"
+  public static readonly URL_API_SAVE_SESSION_WHATSSAP =
+    environment.hostwhassatp + "sessions/start";
+  public static readonly URL_API_GET_STATUS_WHATSSAP =
+    environment.hostwhassatp + "sessions/status-connect";
+  public static readonly URL_API_GET_OBTENER_QR_WHATSSAP =
+    environment.hostwhassatp + "sessions/qr";
 }

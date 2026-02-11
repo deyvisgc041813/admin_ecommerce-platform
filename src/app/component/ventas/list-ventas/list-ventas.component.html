@@ -1,136 +1,179 @@
-<div class="d-flex justify-content-between mb-2">
-  <div class="form-group">
-    <input
-      type="text"
-      class="form-control"
-      [(ngModel)]="textSearch"
-      id="name"
-      placeholder="Buscar"
-    />
+<div class="card">
+  <div class="card-body">
+    <div class="row mb-md-2">
+      <div class="col-12 col-md-6 mb-2 mb-md-0">
+        <div class="dataTables_length" id="tickets-table_length">
+          <label class="d-inline-flex align-items-center"
+            >Mostrar
+            <select
+              name="tickets-table_length"
+              aria-controls="tickets-table"
+              [(ngModel)]="filtros.size"
+              (change)="onPageSizeChange(filtros.size)"
+              class="form-control form-control-sm mx-2"
+            >
+              <option [ngValue]="10">10</option>
+              <option [ngValue]="25">25</option>
+              <option [ngValue]="50">50</option>
+              <option [ngValue]="100">100</option>
+            </select>
+            entradas</label
+          >
+        </div>
+      </div>
+      <!-- Search -->
+      <!-- <div class="col-12 col-md-6 text-md-end mb-2 mb-md-0">
+          <div id="tickets-table_filter" class="dataTables_filter">
+            <label class="d-inline-flex align-items-center">Buscar:
+              <input type="text" name="searchTerm" class="form-control form-control-sm ms-2"
+                aria-controls="tickets-table" [(ngModel)]="searchTerm">
+            </label>
+  
+          </div>
+        </div> -->
+      <div class="d-flex justify-content-between mb-2">
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="textSearch"
+            id="name"
+            placeholder="Buscar"
+          />
+        </div>
+      </div>
+      <!-- End search -->
+    </div>
+    <div class="table-responsive">
+      <table class="table mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Codigo Pedido</th>
+            <th>Cliente</th>
+            <th>Operación</th>
+            <th>Metodo Pago</th>
+            <th>Fecha Registro</th>
+            <th>Tienda</th>
+            <th>Comprobante</th>
+            <th>Total Descuento</th>
+            <th>Total Venta</th>
+            <th>Estado</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="list?.content | filter: textSearch as result">
+            <tr *ngFor="let item of result | filter: textSearch; let i = index">
+              <td>{{ item.codigoPedido }}</td>
+              <td>{{ item.cliente }}</td>
+              <td>
+                <span [ngClass]="getTipoOperacion(item.tipoTransaccion)?.class">
+                  {{ getTipoOperacion(item.tipoTransaccion)?.label }}
+                </span>
+              </td>
+              <td>
+                <span [ngClass]="getMetodoPago(item.metodoPago)?.class">
+                  {{ getMetodoPago(item.metodoPago)?.label }}
+                </span>
+              </td>
+              <td>{{ item.fechaCreacionPedido | fechaIso }}</td>
+              <td>{{ item.nombreTienda }}</td>
+              <td>{{ item.comprobante ?? "Desconocido" }}</td>
+              <td>{{ item.descuento | number: "1.2-2" }}</td>
+              <td>{{ item.total | number: "1.2-2" }}</td>
+              <td>
+                <span [ngClass]="getEstado(item.estado)?.class">
+                  {{ getEstado(item.estado)?.label }}
+                </span>
+              </td>
+              <td>
+                <div ngbDropdown container="body">
+                  <button ngbDropdownToggle class="btn btn-outline-info">
+                    Acciones <i class="mdi mdi-chevron-down"></i>
+                  </button>
+
+                  <div ngbDropdownMenu>
+                    <button
+                      class="dropdown-item"
+                      *ngFor="let action of getOrderActions(item)"
+                      (click)="action.action()"
+                    >
+                      {{ action.label }}
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <div class="row justify-content-md-between align-items-md-center mt-2">
+      <div class="col-12 col-md-5 mb-2 mb-md-0">
+        <div
+          class="dataTables_info"
+          id="tickets-table_info"
+          role="status"
+          aria-live="polite"
+        >
+          Mostrando {{ filtros.page }} a {{ filtros.size }} de
+          {{ totalElements }} entradas
+        </div>
+      </div>
+      <!-- Pagination -->
+      <div class="col-12 col-md-5">
+        <div class="d-flex justify-content-end justify-content-md-end">
+          <!-- <ngb-pagination
+            [collectionSize]="total"
+            [(page)]="filtros.page"
+            [pageSize]="filtros.pageSize"
+            (pageChange)="onPageChange($event)"
+          >
+          </ngb-pagination> -->
+          <app-pagination
+            [totalItems]="totalElements"
+            [pageSize]="filtros.size"
+            [currentPage]="filtros.page"
+            (pageChange)="onPageChange($event)"
+          >
+          </app-pagination>
+        </div>
+      </div>
+      <!-- End Pagination -->
+    </div>
   </div>
 </div>
-<div class="table-responsive">
-  <table class="table mb-0">
-    <thead class="table-light">
-      <tr>
-        <th>Codigo Pedido</th>
-        <th>Cliente</th>
-        <th>Operación</th>
-        <th>Metodo Pago</th>
-        <th>Fecha Registro</th>
-        <th>Tienda</th>
-        <th>Comprobante</th>
-        <th>Total Descuento</th>
-        <th>Total Venta</th>
-        <th>Estado</th>
-        <th>Opciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <ng-container *ngIf="list?.content | filter: textSearch as result">
-        <tr *ngFor="let item of result | filter: textSearch; let i = index">
-          <td>{{ item.codigoPedido }}</td>
-          <td>{{ item.cliente }}</td>
-          <td>
-            <span [ngClass]="getTipoOperacion(item.tipoTransaccion)?.class">
-              {{ getTipoOperacion(item.tipoTransaccion)?.label }}
-            </span>
-          </td>
-          <td>
-            <span [ngClass]="getMetodoPago(item.metodoPago)?.class">
-              {{ getMetodoPago(item.metodoPago)?.label }}
-            </span>
-          </td>
-          <td>{{ item.fechaCreacionPedido | fechaIso }}</td>
-          <td>{{ item.nombreTienda }}</td>
-          <td>{{ item.comprobante ?? "Desconocido" }}</td>
-          <td>{{ item.descuento | number: "1.2-2" }}</td>
-          <td>{{ item.total | number: "1.2-2" }}</td>
-          <td>
-            <span [ngClass]="getEstado(item.estado)?.class">
-              {{ getEstado(item.estado)?.label }}
-            </span>
-          </td>
-          <td>
-            <div ngbDropdown container="body">
-              <button ngbDropdownToggle class="btn btn-outline-info">
-                Acciones <i class="mdi mdi-chevron-down"></i>
-              </button>
+<ng-template #receiptModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Comprobante de Transferencia</h5>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
 
-              <div ngbDropdownMenu>
-                <button
-                  class="dropdown-item"
-                  *ngFor="let action of getOrderActions(item)"
-                  (click)="action.action()"
-                >
-                  {{ action.label }}
-                </button>
-              </div>
-            </div>
-          </td>
-          <!-- <td>
-            <button
-              *ngIf="+item.status === 0"
-              type="button"
-              class="btn d-flex btn-light-danger d-block text-danger font-medium"
-            >
-              Por Atenter
-            </button>
-            <button
-              *ngIf="+item.status === 1"
-              type="button"
-              class="btn d-flex btn-light-success d-block text-success font-medium"
-            >
-              Atentido
-            </button>
-          </td>
-          <td>
-            <button
-              *ngIf="+item.status === 0"
-              type="button"
-              ngbTooltip="Atender"
-              (click)="atender(item.id)"
-              class="btn btn-outline-success btn-sm"
-              style="margin-left: 5px"
-            >
-              <span><i class="fas fa-check"></i></span>
-            </button>
-            <button
-              type="button"
-              ngbTooltip="Ver"
-              (click)="
-                ver(
-                  item.id,
-                  item.total_discount,
-                  item.total_amount,
-                  item.detalle
-                )
-              "
-              class="btn btn-outline-primary btn-sm"
-              style="margin-left: 5px"
-            >
-              <span><i class="fas fa-eye"></i></span>
-            </button>
-            <button
-              *ngIf="+item.status === 0"
-              type="button"
-              ngbTooltip="Eliminar"
-              (click)="eliminar(item.id)"
-              class="btn btn-sm btn-outline-danger"
-              style="margin-left: 5px"
-            >
-              <span><i class="fas fa-trash"></i></span>
-            </button>
-          </td> -->
-        </tr>
-      </ng-container>
-    </tbody>
-  </table>
-  <app-pagination
-    [totalItems]="totalElements"
-    [pageSize]="pageSize"
-    [currentPage]="pageNumber"
-    (pageChange)="onPageChange($event)"
-  >
-  </app-pagination>
-</div>
+  <div class="modal-body text-center">
+    <div *ngIf="loading" class="my-4">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+    <img
+      *ngIf="!loading && receiptUrl"
+      [src]="receiptUrl"
+      class="img-fluid rounded shadow"
+      style="max-height: 70vh;"
+    />
+  </div>
+
+  <div class="modal-footer">
+    <a
+      *ngIf="receiptUrl"
+      [href]="receiptUrl"
+      target="_blank"
+      class="btn btn-outline-primary"
+    >
+      Abrir en nueva pestaña
+    </a>
+
+    <button class="btn btn-secondary" (click)="modal.close()">
+      Cerrar
+    </button>
+  </div>
+</ng-template>

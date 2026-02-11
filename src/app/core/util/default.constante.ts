@@ -269,6 +269,8 @@ export class DataDefault {
       class: "badge bg-warning",
       key: "pending_payment",
       identifier: "pending_payment",
+      confirmText: null,
+      labelBooton: null,
     },
 
     pending_transfer_validation: {
@@ -276,13 +278,24 @@ export class DataDefault {
       class: "badge bg-warning",
       key: "pending_transfer_validation",
       identifier: "pending_transfer_validation",
+      confirmText: null,
+      labelBooton: null,
     },
-
+    reserved: {
+      label: "Reservado",
+      class: "badge bg-dark",
+      key: "reserved",
+      identifier: "reserved",
+      confirmText: null,
+      labelBooton: null,
+    },
     paid: {
       label: "Pagado",
       class: "badge bg-success",
       key: "paid",
       identifier: "paid",
+      confirmText: "¿Estas seguro de confirmar el pago?",
+      labelBooton:  "Confirmar",
     },
 
     processing: {
@@ -290,6 +303,8 @@ export class DataDefault {
       class: "badge bg-info",
       key: "processing",
       identifier: "processing",
+      confirmText: null,
+      labelBooton: null,
     },
 
     shipped: {
@@ -297,6 +312,8 @@ export class DataDefault {
       class: "badge bg-primary",
       key: "shipped",
       identifier: "shipped",
+      confirmText: "¿Confirmas marcar la orden como ENVIADA?",
+      labelBooton: "Confirmar",
     },
 
     delivered: {
@@ -304,6 +321,8 @@ export class DataDefault {
       class: "badge bg-success",
       key: "delivered",
       identifier: "delivered",
+      confirmText: "¿Confirmas marcar la orden como ENTREGADA?",
+      labelBooton:  "Confirmar",
     },
 
     cancelled: {
@@ -311,6 +330,8 @@ export class DataDefault {
       class: "badge bg-danger",
       key: "cancelled",
       identifier: "cancelled",
+      confirmText: "¿Estás seguro de CANCELAR esta orden?",
+      labelBooton: "Cancelar",
     },
 
     rejected: {
@@ -318,6 +339,8 @@ export class DataDefault {
       class: "badge bg-danger",
       key: "rejected",
       identifier: "rejected",
+      confirmText: "¿Estás seguro de RECHAZAR esta orden?",
+      labelBooton: "Rechazar",
     },
 
     refunded: {
@@ -325,12 +348,8 @@ export class DataDefault {
       class: "badge bg-secondary",
       key: "refunded",
       identifier: "refunded",
-    },
-    reserved: {
-      label: "Reservado",
-      class: "badge bg-dark",
-      key: "reserved",
-      identifier: "reserved",
+      confirmText: "¿Estás seguro de REEMBOLSAR esta orden?",
+      labelBooton: "Reembolsar",
     },
   };
 }

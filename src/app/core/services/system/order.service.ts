@@ -1,42 +1,72 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { Category, ListPage, ResponseMessage, Sede, UriConstante } from '../..';
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable, Subject } from "rxjs";
+import { Category, ListPage, ResponseMessage, Sede, UriConstante } from "../..";
+import { FilterList } from "@rdinvesiones/core/interface/general.interface";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class OrderService {
-   isRegisterOrUpdate$: Subject<boolean> = new Subject<boolean>();
+  isRegisterOrUpdate$: Subject<boolean> = new Subject<boolean>();
   constructor(private http: HttpClient) {}
   getById(id: number): Observable<Category> {
     return this.http.get<Category>(UriConstante.ORDER_RESOURCE + `/${id}`);
   }
   register(form: FormData): Observable<ResponseMessage> {
-    return this.http.post<ResponseMessage>(UriConstante.ORDER_RESOURCE + "/", form);
+    return this.http.post<ResponseMessage>(
+      UriConstante.ORDER_RESOURCE + "/",
+      form,
+    );
   }
   update(id: number, category: Category): Observable<ResponseMessage> {
     return this.http.put<ResponseMessage>(
       `${UriConstante.ORDER_RESOURCE}/${id}`,
-      category
+      category,
     );
   }
   delete(id: number) {
-    return this.http.delete<ResponseMessage>(UriConstante.ORDER_RESOURCE + `/eliminar/${id}`);
+    return this.http.delete<ResponseMessage>(
+      UriConstante.ORDER_RESOURCE + `/eliminar/${id}`,
+    );
   }
-  atender(id: number) {
-    return this.http.get<ResponseMessage>(UriConstante.ORDER_RESOURCE + `/atender/${id}`);
+  updateOrderStatus(orderId: number, storeId: number, clientId:number, status: string) {
+    const body = {
+      storeId,
+      status,
+      clientId
+    };
+
+    return this.http.patch<ResponseMessage>(
+      `${UriConstante.ORDER_RESOURCE}/${orderId}/status`,
+      body,
+    );
   }
+
   saveStatus(status: boolean) {
     this.isRegisterOrUpdate$.next(status);
   }
-  get(): Observable<ListPage> {
-    return this.http.get<ListPage>(UriConstante.ORDER_RESOURCE);
+  get(filter: FilterList): Observable<ListPage> {
+    const params = new HttpParams()
+      .append("page", filter.page)
+      .append("size", filter.size);
+    return this.http.get<ListPage>(UriConstante.ORDER_RESOURCE, { params });
+  }
+  getOrderDetails(orderId:number, clientId:number, storeId:number): Observable<any> {
+    const params = new HttpParams()
+      .append("clientId", clientId)
+      .append("storeId", storeId);
+    return this.http.get<any>(UriConstante.ORDER_RESOURCE + `/ecomerce/resumen/${orderId}`, { params });
   }
   registerSede(form: Sede): Observable<ResponseMessage> {
-    return this.http.post<ResponseMessage>(UriConstante.ORDER_RESOURCE + "/register-sede", form);
+    return this.http.post<ResponseMessage>(
+      UriConstante.ORDER_RESOURCE + "/register-sede",
+      form,
+    );
   }
   getSede(): Observable<ListPage> {
-    return this.http.get<ListPage>(UriConstante.ORDER_RESOURCE + "/obtener-sede");
+    return this.http.get<ListPage>(
+      UriConstante.ORDER_RESOURCE + "/obtener-sede",
+    );
   }
 }
