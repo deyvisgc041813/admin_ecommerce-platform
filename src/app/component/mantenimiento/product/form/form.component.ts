@@ -32,6 +32,7 @@ import { RequestStatus } from "src/app/core/type/status.type";
 export class FormProductComponent implements OnInit {
   @Input() titulo: string = "";
   @Input() formProduct: any;
+  paymentPercent = 5;
   active = 1;
   idProduct: number = 0;
   title: string = "Crear Producto";
@@ -47,16 +48,16 @@ export class FormProductComponent implements OnInit {
   subCategory: SubCategory[];
   marca: Marca[];
   color: Color[];
-  garantia:Garantia[]
+  garantia: Garantia[];
 
   extencionOld = "";
   filesDetailsDelete: Object[] = [];
   tienda: any = [];
   company: any = [];
-  deleteStoretemporal: any = []
-  storeTemporal: any = []
-  accesorios: any = []
-  companyId: number = 2
+  deleteStoretemporal: any = [];
+  storeTemporal: any = [];
+  accesorios: any = [];
+  companyId: number = 2;
   constructor(
     private formBuilder: FormBuilder,
     private totastService: ToastrService,
@@ -66,19 +67,18 @@ export class FormProductComponent implements OnInit {
     private documentService: DocumentService,
     private sedeService: SedeService,
     private companyService: CompanyService,
-    private brandService: BrandService
+    private brandService: BrandService,
   ) {
     config.backdrop = "static";
     config.keyboard = false;
     this.color = DataDefault.COLORDEFAULT;
-    this.garantia = DataDefault.GARANTIADEFAULT
-
+    this.garantia = DataDefault.GARANTIADEFAULT;
   }
   ngOnInit(): void {
     this.category();
     this.getEmpresa();
-    this.getMarca()
-    this.getAccesorios()
+    this.getMarca();
+    this.getAccesorios();
     this.productFormGroup = this.formBuilder.group({
       nombre: [null, Validators.required],
       codigo: [this.generarCodigoProducto(), [Validators.required]],
@@ -128,6 +128,8 @@ export class FormProductComponent implements OnInit {
   agregarStore() {
     const store = this.formBuilder.group({
       tienda: ["", Validators.required],
+      applyCommission:  [false],
+      precioBase: ["0.00"], // precio original
       precio: ["0.00", [Validators.required, Validators.min(1)]],
       stock: ["0", [Validators.required, Validators.min(1)]],
     });
@@ -137,7 +139,7 @@ export class FormProductComponent implements OnInit {
     return this.productFormGroup?.get("store") as FormArray;
   }
   eliminarStore(index: number) {
-    this.deleteStoretemporal.push(this.store?.value[index])
+    this.deleteStoretemporal.push(this.store?.value[index]);
     this.store.removeAt(index);
   }
   guardar() {
@@ -151,11 +153,13 @@ export class FormProductComponent implements OnInit {
     }
     if (this.files.length === 0) {
       this.totastService.error(
-        "Las imagenes del detalle del producto son requeridos"
+        "Las imagenes del detalle del producto son requeridos",
       );
       return;
     }
+    console.log("this.productFormGroup ", this.productFormGroup)
     if (this.productFormGroup.invalid) {
+     this.totastService.error("Existen campos inválidos en el formulario. Revise la información ingresada.");
       return;
     }
     this.product = {
@@ -187,6 +191,7 @@ export class FormProductComponent implements OnInit {
       return;
     }
     this.isLoading = true;
+    console.log("this.idProduct ", this.idProduct)
     if (this.idProduct === 0) {
       this.productService
         .register(this.product, this.filePrincipal?.file, this.files)
@@ -210,7 +215,7 @@ export class FormProductComponent implements OnInit {
     } else {
       this.product.imageDeleted = this.filesDetailsDelete;
       this.product.imageDetails = this.files.filter(
-        (f) => !(f instanceof File)
+        (f) => !(f instanceof File),
       );
       this.files = this.files.filter((f) => f instanceof File);
       if (this.filePrincipal && !(this.filePrincipal.file instanceof File)) {
@@ -222,7 +227,7 @@ export class FormProductComponent implements OnInit {
           this.product,
           this.filePrincipal?.file,
           this.files,
-          this.deleteStoretemporal
+          this.deleteStoretemporal,
         )
         .subscribe({
           next: (res: ResponseMessage) => {
@@ -254,10 +259,15 @@ export class FormProductComponent implements OnInit {
         tienda: [storeItem.store_id || null],
         stock: [storeItem.stock_quantity || null],
         precio: [storeItem.precio || null],
+        applyCommission: [!!storeItem.applyCommission],
+        precioBase: [storeItem.precio], // precio original
       });
       storeArray.push(storeControl);
     });
-    this.onchangeSubcategory({ id: this.formProduct.categoryId, type_category: ""});
+    this.onchangeSubcategory({
+      id: this.formProduct.categoryId,
+      type_category: "",
+    });
     this.productFormGroup.setValue({
       nombre: this.formProduct?.name,
       codigo: this.formProduct?.codeProduct,
@@ -292,7 +302,7 @@ export class FormProductComponent implements OnInit {
         publicId: ima.publidId,
       };
     });
-    this.getTiendaByCompany(this.formProduct?.store[0]?.companyId)
+    this.getTiendaByCompany(this.formProduct?.store[0]?.companyId);
   }
   category() {
     this.productService.getCategory().subscribe({
@@ -314,13 +324,13 @@ export class FormProductComponent implements OnInit {
     if (existFile) {
       this.totastService.error(
         "No puedes subir 2 veces el archivo " + existFile.name,
-        "Error!"
+        "Error!",
       );
       return;
     } else if (this.files.length >= 7) {
       this.totastService.error(
         "El numero maximo de adjuntar archivos adjuntados es 7.",
-        "Error!"
+        "Error!",
       );
       return;
     } else {
@@ -385,7 +395,7 @@ export class FormProductComponent implements OnInit {
       (error) => {
         this.totastService.error(error.message, "Error!");
         this.status = "init";
-      }
+      },
     );
   }
   updateFile(formData: FormData) {
@@ -400,7 +410,7 @@ export class FormProductComponent implements OnInit {
       (error) => {
         this.totastService.error(error.message, "Error!");
         this.status = "init";
-      }
+      },
     );
   }
   getEmpresa() {
@@ -414,7 +424,7 @@ export class FormProductComponent implements OnInit {
     });
   }
   async getAccesorios() {
-   this.productService.getAccesorio(this.companyId).subscribe({
+    this.productService.getAccesorio(this.companyId).subscribe({
       next: (res: any) => {
         this.accesorios = res;
       },
@@ -427,7 +437,7 @@ export class FormProductComponent implements OnInit {
     this.brandService.fetchAllBrands().subscribe({
       next: (res: ListPage) => {
         this.marca = res.content as Marca[];
-        console.log("this.marca ", this.marca)
+        console.log("this.marca ", this.marca);
       },
       error: (err: any) => {},
     });
@@ -436,8 +446,7 @@ export class FormProductComponent implements OnInit {
     this.sedeService.getByIDcompanySede(id).subscribe({
       next: (res: any) => {
         this.tienda = res;
-        if(this.idProduct === 0) this.agregarStore();
-
+        if (this.idProduct === 0) this.agregarStore();
       },
       error: (error: any) => {
         console.log(error);
@@ -457,8 +466,34 @@ export class FormProductComponent implements OnInit {
   }
   changeStore(index: number) {
     const obj = {
-      tienda: this.formProduct?.store[index].store_id
+      tienda: this.formProduct?.store[index].store_id,
+    };
+    this.deleteStoretemporal.push(obj);
+  }
+  updatePriceBase(index: number) {
+    const stores = this.productFormGroup.get("store") as FormArray;
+    const store = stores.at(index);
+    const precioActual = Number(store.get("precio")?.value) || 0;
+    // Guardamos precio original
+    store.patchValue(
+      {
+        precioBase: precioActual,
+      },
+      { emitEvent: false },
+    );
+  }
+
+  applyCommissionToOneStore(index: number) {
+    const stores = this.productFormGroup.get("store") as FormArray;
+    const store = stores.at(index);
+
+    const apply = store.get("applyCommission")?.value;
+    const base = Number(store.get("precioBase")?.value) || 0;
+    if (apply) {
+      const final = base * (1 + this.paymentPercent / 100);
+      store.patchValue({ precio: final.toFixed(2) });
+    } else {
+      store.patchValue({ precio: base.toFixed(2) });
     }
-    this.deleteStoretemporal.push(obj)
   }
 }

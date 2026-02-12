@@ -92,7 +92,7 @@
         <div class="col-md-12 mb-3">
           <div class="form-check">
             <input class="form-check-input" formControlName="isAccesorio" type="checkbox" id="isAccesorio">
-            <label class="form-check-label" for="destacadoSemana">
+            <label class="form-check-label" for="isAccesorio">
               Es accesorio
             </label>
           </div>
@@ -285,6 +285,7 @@
             </label>
           </div>
         </div>
+ 
         <fieldset class="p-3 border rounded" style="margin-bottom: 20px;">
           <legend class="font-weight-bold">
             <label style="font-size: 15px;">Gestión de Sucursales</label>
@@ -297,7 +298,8 @@
                   class="btn btn-outline-success"
                   (click)="agregarStore()"
                 > Agregar
-                </button> <div  formArrayName="store" [ngClass]="store.length < 5 ? '' : 'scroll-form'"
+                </button> 
+                <div  formArrayName="store" [ngClass]="store.length < 5 ? '' : 'scroll-form'"
                 >
                   <div class="container mt-2">
                     <div
@@ -342,11 +344,11 @@
                               </div>
                             </div>
                           </div>
-                          <div class="col-md-3 mb-3">
+                          <div class="col-md-2 mb-3">
                             <div class="form-group">
                               <label for="exampleInputName">Precio </label>
                               <input type="text" appNumberDecimals formControlName="precio" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && storeForm?.get('precio')?.invalid }" id="precio" />
+                                [ngClass]="{ 'is-invalid': submitted && storeForm?.get('precio')?.invalid }" id="precio"   (input)="updatePriceBase(i)" />
                               <div *ngIf="submitted && storeForm?.get('precio')?.invalid" class="invalid-feedback">
                                 <div *ngIf="storeForm?.get('precio')?.hasError('required')">Precio producto es requerido</div>
                                 <div *ngIf="storeForm?.get('precio')?.hasError('min')">Precio producto debe ser mayor a 0</div>
@@ -354,7 +356,7 @@
                             </div>
                           </div>
                           
-                          <div class="col-md-3 mb-3">
+                          <div class="col-md-2 mb-3">
                             <div class="form-group">
                               <label for="exampleInputName">Stock </label>
                               <input type="text" appNumberOnly formControlName="stock" class="form-control"
@@ -365,6 +367,17 @@
                               </div>
                             </div>
                           </div> 
+                            <div class="col-md-2 mb-3" style="margin-top: 30px;">
+                            <div class="form-check form-switch">
+                              <input
+                                class="form-check-input"
+                                type="checkbox"
+                                formControlName="applyCommission"
+                                (change)="applyCommissionToOneStore(i)"
+                              />
+                              <label class="form-check-label"> Online </label>
+                            </div>
+                          </div>
                           <div class="col-md-1 mb-2">
                             <div class="form-group">
                               <button
