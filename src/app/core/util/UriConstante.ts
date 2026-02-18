@@ -21,6 +21,8 @@ export class UriConstante {
     environment.API_BASE_URL + "ecomerce";
   public static readonly CATEGORY_RESOURCE =
     environment.API_BASE_URL + "category";
+      public static readonly PARENT_MENU_RESOURCE =
+    environment.API_BASE_URL + "parent-menu";
   public static readonly BRAND_RESOURCE = environment.API_BASE_URL + "brand";
   public static readonly CONFIGURATIONS_RESOURCE =
     environment.API_BASE_URL + "configurations";

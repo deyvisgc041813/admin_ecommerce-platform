@@ -58,7 +58,7 @@
                         class="btn btn-sm btn-outline-success">
                         <span><i class="fas fa-edit"></i></span>
                     </button>
-                    <button type="button" ngbTooltip="Eliminar Producto" (click)="eliminar(table.id)"
+                    <button type="button" ngbTooltip="Eliminar categoria" (click)="eliminar(table.id)"
                         class="btn btn-sm btn-outline-danger" style="margin-left: 5px">
                         <span><i class="fas fa-trash"></i></span>
                     </button>
@@ -92,24 +92,3 @@
 
 
 
-
-
-
-
-
-
-<!-- 
-
-
-
-
-<div class="d-flex justify-content-between" style="margin-top: 50px;">
-    <div class="form-group">
-        <input type="text" class="form-control" [(ngModel)]="textSearch" id="name" placeholder="Buscar" />
-    </div>
-</div>
-<div class="table-responsive">
-    <app-pagination [totalItems]="totalElements" [pageSize]="pageSize" [currentPage]="pageNumber"
-        (pageChange)="onPageChange($event)">
-    </app-pagination>
-</div> -->

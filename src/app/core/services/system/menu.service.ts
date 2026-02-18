@@ -75,4 +75,7 @@ export class MenuService {
   getSubMenu(categoryId: number): Observable<ListPage> {
     return this.http.get<ListPage>(UriConstante.MENU_RESOURCE + "/sub-menus/"+ `${categoryId}`);
   }
+  getMainMenu(): Observable<ListPage> {
+    return this.http.get<ListPage>(`${UriConstante.MENU_RESOURCE}/main`);
+  }
 }

@@ -40,6 +40,7 @@ import { ServiceConfigurationsComponent } from './system/configuracion/service-c
 import { WhatsappComponent } from './system/configuracion/whatsapp/whatsapp.component';
 import { WebsocketService } from '@rdinvesiones/core/services/system/websocket.service';
 import { PedidosComponent } from './system/comercial/pedidos/pedidos.component';
+import { ParentMenuComponent } from './system/mantenimiento/parent-menu/parent-menu.component';
 
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
@@ -52,7 +53,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   declarations: [CategoryComponent, ProductComponent, SubcategriesComponent,
      OperatorMenuComponent, MenuComponent, CompanyComponent, CompanySedesComponent, 
      BannerComponent, BrandComponent, AdminComponent, ProfileComponent, RoleAndModulesComponent, RolPermisoModuloComponent, 
-     ServiceConfigurationsComponent, WhatsappComponent, PedidosComponent],
+     ServiceConfigurationsComponent, WhatsappComponent, PedidosComponent, ParentMenuComponent],
   imports: [
     ComponentModule,
     CommonModule,

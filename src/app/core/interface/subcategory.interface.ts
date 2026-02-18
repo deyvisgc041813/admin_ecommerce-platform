@@ -9,4 +9,5 @@ export interface SubCategory {
     categoRy?: Category,
     type_sub_category: string,
     path: string,
+    parentMenuId?:number
 }

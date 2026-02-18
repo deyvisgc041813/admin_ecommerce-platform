@@ -38,15 +38,9 @@
       <table class="table mb-0">
         <thead class="table-light">
           <tr>
-            <th>Codigo Pedido</th>
-            <th>Cliente</th>
-            <th>Operación</th>
-            <th>Metodo Pago</th>
-            <th>Fecha Registro</th>
-            <th>Tienda</th>
-            <th>Comprobante</th>
-            <th>Total Descuento</th>
-            <th>Total Venta</th>
+            <th>Imagen</th>
+             <th>Descripcion</th>
+            <th>Fecha creación</th>
             <th>Estado</th>
             <th>Opciones</th>
           </tr>
@@ -54,44 +48,34 @@
         <tbody>
           <ng-container *ngIf="list?.content | filter: textSearch as result">
             <tr *ngFor="let item of result | filter: textSearch; let i = index">
-              <td>{{ item.codigoPedido }}</td>
-              <td>{{ item.cliente }}</td>
+              <td ><img style="width: 50px; height: 50px;" [src]="item.logo" /></td>
+              <td>{{ item.descripcion }}</td>
+              <td>{{ item.fechaCreacion | fechaIso }}</td>
+              <td>{{ item.estado }}</td>
               <td>
-                <span [ngClass]="getTipoOperacion(item.tipoTransaccion)?.class">
-                  {{ getTipoOperacion(item.tipoTransaccion)?.label }}
-                </span>
-              </td>
-              <td>
-                <span [ngClass]="getMetodoPago(item.metodoPago)?.class">
-                  {{ getMetodoPago(item.metodoPago)?.label }}
-                </span>
-              </td>
-              <td>{{ item.fechaCreacionPedido | fechaIso }}</td>
-              <td>{{ item.nombreTienda }}</td>
-              <td>{{ item.comprobante ?? "Desconocido" }}</td>
-              <td>{{ item.descuento | number: "1.2-2" }}</td>
-              <td>{{ item.total | number: "1.2-2" }}</td>
-              <td>
-                <span [ngClass]="getEstado(item.estado)?.class">
-                  {{ getEstado(item.estado)?.label }}
-                </span>
-              </td>
-              <td>
-                <div ngbDropdown container="body">
-                  <button ngbDropdownToggle class="btn btn-outline-info">
-                    Acciones <i class="mdi mdi-chevron-down"></i>
-                  </button>
-
-                  <div ngbDropdownMenu>
-                    <button
-                      class="dropdown-item"
-                      *ngFor="let action of getOrderActions(item)"
-                      (click)="action.action()"
-                    >
-                      {{ action.label }}
-                    </button>
-                  </div>
-                </div>
+                <button
+                  type="button"
+                  ngbTooltip="Actualizar menu"
+                  (click)="edit(item.parentId)"
+                  class="btn btn-sm btn-outline-success"
+                >
+                  <span><i class="fas fa-edit"></i></span>
+                </button>
+                <!-- <button
+                  type="button"
+                  ngbTooltip="Eliminar menu"
+                  (click)="eliminar(item.parentId)"
+                  class="btn btn-sm btn-outline-danger"
+                  style="margin-left: 5px"
+                >
+                  <span><i class="fas fa-trash"></i></span>
+                </button> -->
+                <button type="button" [ngbTooltip]="item.estado === 'Active' ? 'Desactivar': 'Activar'" (click)="actualizarEstado(item.parentId, item.estado)"
+                  class="btn btn-sm btn-outline-danger ms-1"
+                  [ngClass]="{'btn-outline-danger': item.estado === 'Active', 'btn-outline-success': item.estado === 'Inactive'}">
+                  <span><i class="fas fa-toggle-off" *ngIf="item.estado === 'Active'"></i></span>
+                  <span><i class="fas fa-toggle-on" *ngIf="item.estado === 'Inactive'"></i></span>
+                </button>
               </td>
             </tr>
           </ng-container>
@@ -133,37 +117,3 @@
     </div>
   </div>
 </div>
-<ng-template #receiptModal let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title">Comprobante de Transferencia</h5>
-    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
-  </div>
-
-  <div class="modal-body text-center">
-    <div *ngIf="loading" class="my-4">
-      <div class="spinner-border text-primary"></div>
-    </div>
-
-    <img
-      *ngIf="!loading && receiptUrl"
-      [src]="receiptUrl"
-      class="img-fluid rounded shadow"
-      style="max-height: 70vh;"
-    />
-  </div>
-
-  <div class="modal-footer">
-    <a
-      *ngIf="receiptUrl"
-      [href]="receiptUrl"
-      target="_blank"
-      class="btn btn-outline-primary"
-    >
-      Abrir en nueva pestaña
-    </a>
-
-    <button class="btn btn-secondary" (click)="modal.close()">
-      Cerrar
-    </button>
-  </div>
-</ng-template>

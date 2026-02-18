@@ -1,0 +1,24 @@
+
+
+<div class="container-fluid">
+  <app-page-title title="Historial de menus superiores" [breadcrumbItems]="breadCrumbItems"></app-page-title>
+  <div class="d-flex justify-content-end mb-2">  
+    <button class="btn btn-outline-info btn-group-lg btn-sm" (click)="open()">Nuevo <i class="fas fa-plus"></i>
+    </button>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+
+        <div class="card-body">
+
+          <app-list-parent (update)="isUpdate($event)"></app-list-parent>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--  -->
+<ng-template #content>
+  <app-form (success)="onSuccess($event)"></app-form>
+</ng-template>

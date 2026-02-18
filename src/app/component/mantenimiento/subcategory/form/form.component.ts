@@ -16,9 +16,8 @@ export class FormSubCategoryComponent implements OnInit {
   @Input() titulo: string = '';
   @Input() categoriaId: number = 0;
   @Input() formSubCategory: SubCategory
-  
+  @Input() parentMenuId: number = 0
   idSubcategory: number = 0
-  
   title: string = 'Crear Sub Categoria';
   formGrupSubCate: FormGroup = new FormGroup({});
   submitted: boolean = false

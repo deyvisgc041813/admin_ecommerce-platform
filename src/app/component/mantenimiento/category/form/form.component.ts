@@ -100,8 +100,10 @@ export class FormCategoryComponent implements OnInit {
     return this.formGrupCate;
   }
   setIdit () {
+    console.log("this?.formCategory ", this?.formCategory)
     this.formGrupCate?.setValue({
       category_name: this?.formCategory?.category_name,
+      type_category: this?.formCategory?.type_category
     })
     this.idCategory = this?.formCategory?.id || 0
   }

@@ -1,0 +1,92 @@
+<div class="modal-header" *ngIf="titulo">
+  <h4 class="modal-title" id="modal-basic-title">{{ titulo }}</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="getDismissReason(0)"
+  ></button>
+</div>
+<div class="modal-body" *ngIf="titulo">
+  <form [formGroup]="formGrupMenu" (ngSubmit)="onSubmit()">
+    <div class="menus-scroll">
+      <div formArrayName="menus">
+        <div
+          *ngFor="let menu of menus.controls; let i = index"
+          [formGroupName]="i"
+          class="menu-card p-3 mb-3 border rounded"
+        >
+          <div class="row">
+            <!-- Descripción -->
+            <div class="col-md-6">
+              <label class="form-label">Descripción</label>
+
+              <input
+                type="text"
+                formControlName="descripcion"
+                class="form-control"
+                maxlength="30"
+                placeholder="Ej: Electrónica"
+              />
+
+              <!-- contador -->
+              <small class="text-muted">
+                {{ menu.get("descripcion")?.value?.length || 0 }} / 45
+              </small>
+            </div>
+
+            <!-- Imagen -->
+            <div class="col-md-6">
+              <div class="image-upload-container">
+                <ngx-dropzone
+                  (change)="onSelect($event, i)"
+                  [multiple]="false"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                >
+                  <ngx-dropzone-label *ngIf="!filePrincipal[i]">
+                    Subir Imagen
+                  </ngx-dropzone-label>
+                </ngx-dropzone>
+
+                <div *ngIf="filePrincipal[i]" class="preview-overlay">
+                  <img [src]="filePrincipal[i].preview" class="preview-image" />
+                  <button
+                    type="button"
+                    class="remove-btn"
+                    (click)="filePrincipal[i] = null"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-end mt-2">
+            <button
+              type="button"
+              class="btn btn-sm btn-danger"
+              (click)="removeMenu(i)"
+              *ngIf="menus.length > 1"
+            >
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3" *ngIf="!parentId">
+      <button type="button" class="btn btn-outline-primary" (click)="addMenu()">
+        + Agregar Menú
+      </button>
+    </div>
+
+    <div class="text-end">
+      <button type="button" class="btn btn-outline-info" (click)="onSubmit()">
+        <span *ngIf="!isLoading"> Guardar</span>
+        <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-1x"></i>
+      </button>
+    </div>
+  </form>
+</div>

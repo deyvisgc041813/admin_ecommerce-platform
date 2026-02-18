@@ -1,0 +1,47 @@
+<div class="modal-header" *ngIf="titulo">
+    <h4 class="modal-title" id="modal-basic-title">{{titulo}}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="getDismissReason(0)"></button>
+  </div>
+  <div class="modal-body" *ngIf="titulo">
+
+    <form [formGroup]="formGrupMenu" [ngClass]="menuParent.length < 5 ? '' : 'scroll-form'">
+      <button type="button" class="btn btn-outline-success" (click)="agregarMenu()">Agregar Menu</button>
+      <p></p>
+      <div formArrayName="menuParent" >
+        <div class="container">
+          <div *ngFor="let menu of menuParent.controls; let i = index" [formGroupName]="i">
+            <ng-container *ngIf="menu as menuFormGroup">
+              <div class="row d-flex justify-content-around">
+                       <div class="col-md-10 mb-4">
+                  <div class="form-group">
+                    <label for="exampleInputPassword1">Seleccionar Categoria</label>
+                    <div class="custom-dropdown-container">
+                      <ng-select [ngClass]="{ 'is-invalid': submitted && menuFormGroup.get('categoryId')?.invalid }" [multiple]="true" [items]="categoria"
+                        bindLabel="category_name" formControlName="categoryId" placeholder="Seleccionar Categoria" bindValue="id">
+                      </ng-select>
+                      <div *ngIf="submitted && menuFormGroup.get('categoryId')?.invalid" class="invalid-feedback">
+                        <div *ngIf="menuFormGroup.get('categoryId')?.invalid">Categoria es requerido</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-2 mt-1" >
+                  <div class="form-group">
+                    <button type="button" (click)="eliminar(i)" class="btn btn-sm btn-outline-danger"
+                      style="margin-top: 25px">
+                      <span><i class="fas fa-trash"></i></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="modal-footer" style="position: static;">
+      <button type="submit" class="btn btn-outline-info" (click)="onSubmit()">
+        <span *ngIf="!isLoading"> Guardar</span>
+        <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-1x"></i>
+      </button>
+    </div>

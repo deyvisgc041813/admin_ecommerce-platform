@@ -19,6 +19,7 @@ import { AuthGuard } from '../core';
 import { ServiceConfigurationsComponent } from './system/configuracion/service-configurations/service-configurations.component';
 import { WhatsappComponent } from './system/configuracion/whatsapp/whatsapp.component';
 import { PedidosComponent } from './system/comercial/pedidos/pedidos.component';
+import { ParentMenuComponent } from './system/mantenimiento/parent-menu/parent-menu.component';
 
 const rol = [
   "RESPONSABLE"
@@ -42,6 +43,8 @@ const routes: Routes = [
   { path: 'tiendas', component: CompanySedesComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']} },
   { path: 'banner', component: BannerComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']} },
   { path: 'order', component: PedidosComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
+  { path: 'parent-menu', component: ParentMenuComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
+  
   { path: 'brand', component: BrandComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
   { path: 'admin-users', component: AdminComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
   { path: 'admin-profile', component: ProfileComponent, canActivate: [AuthGuard], data: { expectedRol: ['ADMIN']}},
