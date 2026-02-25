@@ -45,9 +45,6 @@ export class SubcategoryService {
   saveStatus(status: boolean) {
     this.isRegisterOrUpdate$.next(status);
   }
-  get(): Observable<SubCategory[]> {
-    return this.http.get<SubCategory[]>(UriConstante.SUBCATEGORY_RESOURCE);
-  }
   getSubcategoriesWithCategories(): Observable<ListPage> {
     return this.http.get<ListPage>(
       UriConstante.SUBCATEGORY_RESOURCE + "/subcategories-categories",

@@ -59,14 +59,14 @@ export class FormMenuComponent implements OnInit {
     })
   }
   getSubCategory() {
-    this.subCategoriaService.get().subscribe({
-      next: (res: any) => {
-        this.lsSubCategoria = res
-      },
-      error: (error: any) => {
-        console.log(error)
-      }
-    })
+    // this.subCategoriaService.get().subscribe({
+    //   next: (res: any) => {
+    //     this.lsSubCategoria = res
+    //   },
+    //   error: (error: any) => {
+    //     console.log(error)
+    //   }
+    // })
   }
   getMarca() {
     this.brandService.fetchAllBrands().subscribe({

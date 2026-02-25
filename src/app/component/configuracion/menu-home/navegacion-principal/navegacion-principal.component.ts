@@ -200,7 +200,7 @@ export class NavegacionPrincipalComponent implements OnInit {
     });
   }
   getSubCategory() {
-    this.subCategoriaService.get().subscribe({
+    this.subCategoriaService.getSubcategoriesWithCategories().subscribe({
       next: (res: any) => {
         this.lsSubCategoria = res;
       },

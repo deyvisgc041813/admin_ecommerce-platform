@@ -13,10 +13,13 @@
   <table class="table mb-0">
     <thead class="table-light">
       <tr>
-        <th>Empresa</th>
-        <th>Sede</th>
+        <th style="max-width: 200px;">Titulo</th>
+        <th style="max-width: 200px;">Empresa</th>
+        <th style="max-width: 200px;">Sede</th>
         <th>Etiqueta</th>
+        <th>Precio</th>
         <th style="max-width: 200px;">Descripción</th>
+        <th >Tipo</th>
         <th>Imagen</th>
         <th>Estado</th>
         <th>Opciones</th>
@@ -25,28 +28,32 @@
     <tbody>
       <ng-container *ngIf="list?.content | filter : textSearch as result">
         <tr *ngFor="let item of result | filter : textSearch; let i = index">
-          <td>{{ item.empresa }}</td>
-          <td>{{ item.tienda }}</td>
+          <td style="max-width: 200px;">{{ item.title }}</td>
+          <td style="max-width: 200px;">{{ item.empresa }}</td>
+          <td style="max-width: 200px;">{{ item.tienda }}</td>
           <td>{{ item.etiqueta }}</td>
-          <td style="max-width: 200px;">{{ item.descripcion }}</td>
+          <td>S/.{{ item.price | number:'1.2-2' }}</td>
+          <td style="max-width: 200px;">{{ item.description }}</td>
+          <td>{{ item.type }}</td>
+          
           <td>
             <img
               width="100"
               height="100"
-              [src]="item.main_image_url || item.image_url"
-              [alt]="item.name"
+              [src]="item.image_path "
+              [alt]="item.title"
             />
           </td>
           <td>
             <button
-              *ngIf="+item.status === 0"
+              *ngIf="item.status !== 'Active'"
               type="button"
               class="btn d-flex btn-light-danger d-block text-danger font-medium"
             >
               Desabilitado
             </button>
             <button
-              *ngIf="+item.status === 1"
+             *ngIf="item.status === 'Active'"
               type="button"
               class="btn d-flex btn-light-success d-block text-success font-medium"
             >
@@ -58,16 +65,16 @@
             <button
               type="button"
               ngbTooltip="Actualizar Producto"
-              (click)="edit(item.id)"
+              (click)="edit(item.banner_id)"
               class="btn btn-outline-success btn-sm"
             >
               <span><i class="fas fa-edit"></i></span>
             </button>
             <button
               type="button"
-              *ngIf="+item.status === 1"
+              *ngIf="item.status === 'Active'"
               ngbTooltip="Desabilitar"
-              (click)="changeStatus(item.id, item.status)"
+              (click)="changeStatus(item.banner_id, item.status)"
               class="btn btn-sm btn-outline-danger"
               style="margin-left: 5px"
             >
@@ -75,9 +82,9 @@
             </button>
             <button
               type="button"
-              *ngIf="+item.status === 0"
+              *ngIf="item.status !== 'Active'"
               ngbTooltip="Habilitar"
-              (click)="changeStatus(item.id, item.status)"
+              (click)="changeStatus(item.banner_id, item.status)"
               class="btn btn-sm btn-outline-success"
               style="margin-left: 5px"
             >

@@ -10,75 +10,376 @@
 <div class="modal-body">
   <div class="card">
     <div class="card-body">
-      <form [formGroup]="formBanner" class="space-y-3">
-        <div class="row mb-3">
-          <div class="col-md-6 mb-2">
-            <div class="form-group">
-              <label for="exampleFormControlTextarea1"
-                >Seleccione Empresa</label
+            <div class="row mb-4">
+        <div class="col-md-6 mb-2">
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1"
+              >Seleccione Empresa</label
+            >
+            <ng-select
+              [items]="company"
+              bindLabel="name"
+              placeholder="Seleccionar"
+              [(ngModel)]="selectedCompanyId"
+              (change)="changeSede($event.company_id)"
+              bindValue="company_id"
+            >
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-md-6 mb-2">
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Seleccione Sede</label>
+            <ng-select
+              [items]="sedes"
+              bindLabel="name"
+              placeholder="Seleccionar"
+              [(ngModel)]="selectedSedeId"
+              bindValue="store_id"
+            >
+            </ng-select>
+          </div>
+        </div>
+      </div>
+      <ul ngbNav #customNav="ngbNav" [activeId]="activeTab" class="nav-tabs nav-tabs-custom nav-justified">
+        <li   [ngbNavItem]="1"  *ngIf="!bannerUpdate || (bannerUpdate && type === 'PRINCIPAL')">
+          <a ngbNavLink>
+            <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+            <span class="d-none d-sm-block">Banner Principal</span>
+          </a>
+          <ng-template ngbNavContent>
+            <ng-template [ngTemplateOutlet]="TabContent"></ng-template>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="2" *ngIf="!bannerUpdate || (bannerUpdate && type === 'PROMOCION')">
+          <a ngbNavLink>
+            <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+            <span class="d-none d-sm-block">Promociones Secundarias</span>
+          </a>
+          <ng-template ngbNavContent>
+            <ng-template [ngTemplateOutlet]="TabContentCards"></ng-template>
+          </ng-template>
+        </li>
+      </ul>
+      <div [ngbNavOutlet]="customNav"></div>
+      <div class="d-flex justify-content-end">
+        <button
+          type="submit"
+          class="btn btn-outline-info rounded mt-3"
+          (click)="guardar()"
+        >
+          <span *ngIf="!isLoading">Guardar</span>
+          <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-2x"></i>
+        </button>
+      </div>
+    </div>
+    <!-- Fin del card-body -->
+  </div>
+  <!-- Fin del card -->
+</div>
+<!-- Fin del modal-body -->
+
+  <ng-template #TabContent >
+    <p></p>
+    <form [formGroup]="formBanner" class="space-y-3">
+      <fieldset class="p-3 border rounded" style="margin-bottom: 20px">
+        <legend class="font-weight-bold">
+          <label style="font-size: 15px">Banner principal</label>
+        </legend>
+
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body" style="margin-top: -20px">
+              <button
+                *ngIf="!bannerUpdate"
+                type="button"
+                class="btn btn-outline-success"
+                (click)="agregarBanner()"
               >
-              <ng-select
-                [items]="company"
-                bindLabel="name"
-                formControlName="empresa"
-                placeholder="Seleccionar"
-                [ngClass]="{ 'is-invalid': submitted && empresa?.invalid }"
-                (change)="changeSede($event)"
-                bindValue="company_id"
-              >
-              </ng-select>
+                Agregar Item
+              </button>
               <div
-                *ngIf="submitted && empresa?.invalid"
-                class="invalid-feedback"
+                formArrayName="banner"
+                [ngClass]="banner.length < 5 ? '' : 'scroll-form'"
               >
-                <div *ngIf="empresa.errors?.['required']">
-                  Empresa es requerido
+                <div class="container mt-2">
+                  <div
+                    *ngFor="let ba of banner?.controls; let i = index"
+                    [formGroupName]="i"
+                  >
+                    <ng-container *ngIf="ba as bannerForm">
+                      <div class="row d-flex justify-content-around">
+                        <div class="col-md-6 mb-2">
+                        <div class="form-group">
+                          <div class="form-group">
+                            <label for="exampleInputName">Título del Banner</label>
+                            <input
+                              type="text"
+                              formControlName="title"
+                              class="form-control"
+                              [ngClass]="{
+                                'is-invalid':
+                                  submitted &&
+                                  bannerForm?.get('title')?.invalid
+                              }"
+                            />
+                            <div
+                              *ngIf="
+                                submitted &&
+                                bannerForm?.get('title')?.invalid
+                              "
+                              class="invalid-feedback"
+                            >
+                              <div
+                                *ngIf="
+                                  bannerForm
+                                    ?.get('title')
+                                    ?.hasError('required')
+                                "
+                              >
+                              El titulo del banner es obligatorio
+                              </div>
+                            </div>
+
+                          </div>
+
+                          </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <div class="form-group">
+                            <label for="exampleInputName">Precio</label>
+                            <input
+                              type="text"
+                              appNumberDecimals
+                              formControlName="precio"
+                              class="form-control"
+                              [ngClass]="{
+                                'is-invalid':
+                                  submitted &&
+                                  bannerForm?.get('precio')?.invalid
+                              }"
+                            />
+                            <div
+                              *ngIf="
+                                submitted &&
+                                bannerForm?.get('precio')?.invalid
+                              "
+                              class="invalid-feedback"
+                            >
+                              <div
+                                *ngIf="
+                                  bannerForm
+                                    ?.get('precio')
+                                    ?.hasError('required')
+                                "
+                              >
+                                Precio es obligatorio
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                          <div class="form-group">
+                            <label for="exampleFormControlTextarea1"
+                              >Seleccione Etiqueta</label
+                            >
+                            <ng-select
+                              [items]="promotionalPhrases"
+                              bindLabel="context"
+                              formControlName="etiqueta"
+                              placeholder="Seleccionar"
+                              bindValue="context"
+                              [ngClass]="{
+                                'is-invalid':
+                                  submitted &&
+                                  bannerForm?.get('etiqueta')?.invalid
+                              }"
+                            >
+                            </ng-select>
+                            <div
+                              *ngIf="
+                                submitted &&
+                                bannerForm?.get('etiqueta')?.invalid
+                              "
+                              class="invalid-feedback"
+                            >
+                              <div
+                                *ngIf="
+                                  bannerForm
+                                    ?.get('etiqueta')
+                                    ?.hasError('required')
+                                "
+                              >
+                                Etiqueta es obligatorio
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                          <div class="form-group">
+                            <label for="exampleFormControlTextarea1"
+                              >Seleccione Sub categoria</label
+                            >
+                            <ng-select
+                              [items]="subCategoria"
+                              bindLabel="subcategory_name"
+                              formControlName="subCategoria"
+                              placeholder="Seleccionar"
+                              bindValue="subcategory_id"
+                              [ngClass]="{
+                                'is-invalid':
+                                  submitted &&
+                                  bannerForm?.get('etiqueta')?.invalid
+                              }"
+                            >
+                            </ng-select>
+                            <div
+                              *ngIf="
+                                submitted &&
+                                bannerForm?.get('etiqueta')?.invalid
+                              "
+                              class="invalid-feedback"
+                            >
+                              <div
+                                *ngIf="
+                                  bannerForm
+                                    ?.get('etiqueta')
+                                    ?.hasError('required')
+                                "
+                              >
+                                Etiqueta es obligatorio
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-7 mb-2">
+                          <div class="form-group">
+                            <label for="exampleFormControlTextarea1"
+                              >Descripción</label
+                            >
+                            <textarea
+                              class="form-control"
+                              [ngClass]="{
+                                'is-invalid':
+                                  submitted &&
+                                  bannerForm?.get('descripcion')?.invalid
+                              }"
+                              formControlName="descripcion"
+                              id="exampleTextarea"
+                              rows="4"
+                              placeholder="Escribe aquí..."
+                            >
+                            </textarea>
+                            <div
+                              *ngIf="
+                                submitted &&
+                                bannerForm?.get('descripcion')?.invalid
+                              "
+                              class="invalid-feedback"
+                            >
+                              <div
+                                *ngIf="
+                                  bannerForm
+                                    ?.get('descripcion')
+                                    ?.hasError('required')
+                                "
+                              >
+                                Descripción es obligatorio
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                          <div class="image-upload-container">
+                            <ngx-dropzone
+                              (change)="onSelect($event, i)"
+                              [multiple]="false"
+                              accept="image/jpeg,image/jpg,image/png,image/webp"
+                              [ngClass]="{
+                              'invalid-feedback':
+                                submitted && bannerForm?.get('image')?.invalid
+                            }"
+                            >
+                              <ngx-dropzone-label *ngIf="!filePrincipal[i]">
+                                Subir Imagen
+                              </ngx-dropzone-label>
+                            </ngx-dropzone>
+                            <input type="hidden" formControlName="image" />
+                            <div *ngIf="submitted && bannerForm?.get('image')?.invalid"  class="invalid-feedback mt-1"
+                              >
+                                La imagen es obligatoria
+                              </div>
+
+                            <div *ngIf="filePrincipal[i]" class="preview-overlay">
+                              <img [src]="filePrincipal[i].preview" class="preview-image" />
+                              <button
+                                type="button"
+                                class="remove-btn"
+                                (click)="removeBannerImage(i)"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-1 mb-2">
+                          <div class="form-group">
+                            <button
+                              type="button"
+                              *ngIf="!bannerUpdate"
+                              (click)="removeBanner(i)"
+                              class="btn btn-sm btn-outline-danger"
+                              style="margin-top: 30px"
+                            >
+                              <span><i class="fas fa-trash"></i></span>
+                            </button>
+                          </div>
+                        </div>
+                        <hr />
+                      </div>
+                    </ng-container>
+                  </div>
+
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-md-6 mb-2">
-            <div class="form-group">
-              <label for="exampleFormControlTextarea1">Seleccione Sede</label>
-              <ng-select
-                [items]="sedes"
-                bindLabel="name"
-                formControlName="sede"
-                placeholder="Seleccionar"
-                bindValue="store_id"
-              >
-              </ng-select>
-            </div>
-          </div>
         </div>
-        <fieldset class="p-3 border rounded" style="margin-bottom: 20px">
-          <legend class="font-weight-bold">
-            <label style="font-size: 15px">Banner principal</label>
-          </legend>
+      </fieldset>
 
-          <div class="col-lg-12">
-            <div class="card">
-              <div class="card-body" style="margin-top: -20px">
-                <button
-                  *ngIf="!bannerUpdate"
-                  type="button"
-                  class="btn btn-outline-success"
-                  (click)="agregarBanner()"
-                >
-                  Agregar Item
-                </button>
-                <div
-                  formArrayName="banner"
-                  [ngClass]="banner.length < 5 ? '' : 'scroll-form'"
-                >
-                  <div class="container mt-2">
-                    <div
-                      *ngFor="let ba of banner?.controls; let i = index"
-                      [formGroupName]="i"
-                    >
-                      <ng-container *ngIf="ba as bannerForm">
-                        <div class="row d-flex justify-content-around">
-                          <div class="col-md-6 mb-2">
+    </form>
+  </ng-template>
+
+  <ng-template #TabContentCards>
+    <form [formGroup]="formPromociones" class="space-y-3">
+      <fieldset class="p-3 border rounded" style="margin-bottom: 20px">
+        <legend class="font-weight-bold">
+          <label style="font-size: 15px">Promociones</label>
+        </legend>
+
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body" style="margin-top: -20px">
+              <button
+                *ngIf="!bannerUpdate"
+                type="button"
+                class="btn btn-outline-success"
+                (click)="agregarPromociones()"
+              >
+                Agregar Item
+              </button>
+              <div
+                formArrayName="promociones"
+                [ngClass]="promociones.length < 5 ? '' : 'scroll-form'"
+              >
+                <div class="container mt-2">
+                  <div
+                    *ngFor="let prom of promociones?.controls; let i = index"
+                    [formGroupName]="i"
+                  >
+                    <ng-container *ngIf="prom as promForm">
+                      <div class="row d-flex justify-content-around">
+                        <div class="col-md-6 mb-2">
                             <div class="form-group">
                               <label for="exampleFormControlTextarea1"
                                 >Seleccione Producto</label
@@ -93,7 +394,7 @@
                                 [ngClass]="{
                                   'is-invalid':
                                     submitted &&
-                                    bannerForm?.get('productId')?.invalid
+                                    promForm?.get('productId')?.invalid
                                 }"
                               >
                                 <!-- Plantilla personalizada para mostrar imagen y texto -->
@@ -113,13 +414,13 @@
                               <div
                                 *ngIf="
                                   submitted &&
-                                  bannerForm?.get('productId')?.invalid
+                                  promForm?.get('productId')?.invalid
                                 "
                                 class="invalid-feedback"
                               >
                                 <div
                                   *ngIf="
-                                    bannerForm
+                                    promForm
                                       ?.get('productId')
                                       ?.hasError('required')
                                   "
@@ -128,153 +429,183 @@
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          <div class="col-md-2 mb-3">
-                            <div class="form-group">
-                              <label for="exampleInputName">Precio</label>
-                              <input
-                                type="text"
-                                appNumberDecimals
-                                formControlName="precio"
-                                class="form-control"
-                                [ngClass]="{
-                                  'is-invalid':
-                                    submitted &&
-                                    bannerForm?.get('precio')?.invalid
-                                }"
-                              />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                          <div class="form-group">
+                          <div class="form-group">
+                            <label for="exampleInputName">Título de la promoción</label>
+                  
+                            <textarea
+                              class="form-control"
+                              [ngClass]="{
+                                'is-invalid':
+                                  submitted &&
+                                  promForm?.get('title')?.invalid
+                              }"
+                              formControlName="title"
+                              id="title"
+                              rows="4"
+                              placeholder="Escribe aquí..."
+                            >
+                            </textarea>
+                            <div
+                              *ngIf="
+                                submitted &&
+                                promForm?.get('title')?.invalid
+                              "
+                              class="invalid-feedback"
+                            >
                               <div
                                 *ngIf="
-                                  submitted &&
-                                  bannerForm?.get('precio')?.invalid
+                                  promForm
+                                    ?.get('title')
+                                    ?.hasError('required')
                                 "
-                                class="invalid-feedback"
                               >
-                                <div
-                                  *ngIf="
-                                    bannerForm
-                                      ?.get('precio')
-                                      ?.hasError('required')
-                                  "
-                                >
-                                  Precio es obligatorio
-                                </div>
+                              El titulo de la promoción es obligatorio
                               </div>
                             </div>
-                          </div>
-                          <div class="col-md-4 mb-2">
-                            <div class="form-group">
-                              <label for="exampleFormControlTextarea1"
-                                >Seleccione Etiqueta</label
-                              >
-                              <ng-select
-                                [items]="promotionalPhrases"
-                                bindLabel="context"
-                                formControlName="etiqueta"
-                                placeholder="Seleccionar"
-                                bindValue="context"
-                                [ngClass]="{
-                                  'is-invalid':
-                                    submitted &&
-                                    bannerForm?.get('etiqueta')?.invalid
-                                }"
-                              >
-                              </ng-select>
-                              <div
-                                *ngIf="
-                                  submitted &&
-                                  bannerForm?.get('etiqueta')?.invalid
-                                "
-                                class="invalid-feedback"
-                              >
-                                <div
-                                  *ngIf="
-                                    bannerForm
-                                      ?.get('etiqueta')
-                                      ?.hasError('required')
-                                  "
-                                >
-                                  Etiqueta es obligatorio
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                              <label for="exampleFormControlTextarea1"
-                                >Descripción</label
-                              >
-                              <textarea
-                                class="form-control"
-                                [ngClass]="{
-                                  'is-invalid':
-                                    submitted &&
-                                    bannerForm?.get('etiqueta')?.invalid
-                                }"
-                                formControlName="descripcion"
-                                id="exampleTextarea"
-                                rows="4"
-                                placeholder="Escribe aquí..."
-                              >
-                              </textarea>
-                              <div
-                                *ngIf="
-                                  submitted &&
-                                  bannerForm?.get('descripcion')?.invalid
-                                "
-                                class="invalid-feedback"
-                              >
-                                <div
-                                  *ngIf="
-                                    bannerForm
-                                      ?.get('descripcion')
-                                      ?.hasError('required')
-                                  "
-                                >
-                                  Descripción es obligatorio
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                      
 
-                          <div class="col-md-1 mb-3">
-                            <div class="form-group">
+                          </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                          <div class="form-group">
+                            <label for="exampleInputName">Precio</label>
+                            <input
+                              type="text"
+                              appNumberDecimals
+                              formControlName="precio"
+                              class="form-control"
+                              [ngClass]="{
+                                'is-invalid':
+                                  submitted &&
+                                  promForm?.get('precio')?.invalid
+                              }"
+                            />
+                            <div
+                              *ngIf="
+                                submitted &&
+                                promForm?.get('precio')?.invalid
+                              "
+                              class="invalid-feedback"
+                            >
+                              <div
+                                *ngIf="
+                                  promForm
+                                    ?.get('precio')
+                                    ?.hasError('required')
+                                "
+                              >
+                                Precio es obligatorio
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                          <div class="form-group">
+                            <label for="exampleFormControlTextarea1"
+                              >Seleccione Etiqueta</label
+                            >
+                            <ng-select
+                              [items]="promotionalPhrases"
+                              bindLabel="context"
+                              formControlName="etiqueta"
+                              placeholder="Seleccionar"
+                              bindValue="context"
+                              [ngClass]="{
+                                'is-invalid':
+                                  submitted &&
+                                  promForm?.get('etiqueta')?.invalid
+                              }"
+                            >
+                            </ng-select>
+                            <div
+                              *ngIf="
+                                submitted &&
+                                promForm?.get('etiqueta')?.invalid
+                              "
+                              class="invalid-feedback"
+                            >
+                              <div
+                                *ngIf="
+                                  promForm
+                                    ?.get('etiqueta')
+                                    ?.hasError('required')
+                                "
+                              >
+                                Etiqueta es obligatorio
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-5 mb-3">
+                          <div class="image-upload-container">
+                            <ngx-dropzone
+                              (change)="onSelectPromo($event, i)"
+                              [multiple]="false"
+                                [ngClass]="{
+                                  'invalid-feedback':
+                                    submitted && promForm?.get('image')?.invalid
+                                }"
+                              accept="image/jpeg,image/jpg,image/png,image/webp"
+                            >
+                              <ngx-dropzone-label *ngIf="!filePrincipalPromo[i]">
+                                Subir Imagen
+                              </ngx-dropzone-label>
+                            </ngx-dropzone>
+                            <input type="hidden" formControlName="image" />
+                            <div *ngIf="submitted && promForm?.get('image')?.invalid"
+                              class="invalid-feedback mt-1"
+                            >
+                              La imagen es obligatoria
+                            </div>
+
+                            <div *ngIf="filePrincipalPromo[i]" class="preview-overlay">
+                              <img [src]="filePrincipalPromo[i].preview" class="preview-image" />
                               <button
                                 type="button"
-                                *ngIf="!bannerUpdate"
-                                (click)="eliminarBanner(i)"
-                                class="btn btn-sm btn-outline-danger"
-                                style="margin-top: 30px"
+                                class="remove-btn"
+                                (click)="removePromoImage(i)"
                               >
-                                <span><i class="fas fa-trash"></i></span>
+                                ✕
                               </button>
                             </div>
                           </div>
-                          <hr />
                         </div>
-                      </ng-container>
-                    </div>
+                        <div class="col-md-2 mb-3" style="margin-top: 30px;">
+                            <div class="form-check form-switch">
+                              <input
+                                class="form-check-input"
+                                type="checkbox"
+                                formControlName="promPrincipal"
+                                (change)="applyPromosionPrincipal(i)"
+                              />
+                              <label class="form-check-label"> Principal </label>
+                            </div>
+                          </div>
+                        <div class="col-md-1 mb-3">
+                          <div class="form-group">
+                            <button
+                              type="button"
+                              *ngIf="!bannerUpdate"
+                              (click)="removePromocion(i)"
+                              class="btn btn-sm btn-outline-danger"
+                              style="margin-top: 30px"
+                            >
+                              <span><i class="fas fa-trash"></i></span>
+                            </button>
+                          </div>
+                        </div>
+                        <hr />
+                      </div>
+                    </ng-container>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </fieldset>
-        <div class="d-flex justify-content-end">
-          <button
-            type="submit"
-            class="btn btn-outline-info rounded mt-3"
-            (click)="guardar()"
-          >
-            <span *ngIf="!isLoading">Guardar</span>
-            <i *ngIf="isLoading" class="fas fa-spinner fa-pulse fa-2x"></i>
-          </button>
         </div>
-      </form>
-    </div>
-    <!-- Fin del card-body -->
-  </div>
-  <!-- Fin del card -->
-</div>
-<!-- Fin del modal-body -->
+      </fieldset>
+    </form>
+  </ng-template>

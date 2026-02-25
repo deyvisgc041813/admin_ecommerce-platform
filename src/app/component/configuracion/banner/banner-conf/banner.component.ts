@@ -61,7 +61,7 @@ export class BannerConfComponent implements OnInit {
     })
   }
   changeStatus(id: number, status: string) {
-    const message = +status === 1 ? "Desabilitar" : "Habilitar"
+    const message = status === "Active" ? "Desabilitar" : "Habilitar"
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',

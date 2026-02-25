@@ -54,6 +54,7 @@ export class FormCompanyComponent implements OnInit {
       num_cuenta: ["", Validators.required],
       cci: ["", [Validators.required, Validators.minLength(20), Validators.maxLength(20)]],
       moneda: ["Soles", Validators.required],
+      account_holder_name: ["", Validators.required]
     });
     if (this.formCompany) {
       this.setIdit()
@@ -105,6 +106,7 @@ export class FormCompanyComponent implements OnInit {
     formData.append("num_cuenta", this.formGrupBank.get("num_cuenta")?.value)
     formData.append("cci", this.formGrupBank.get("cci")?.value)
     formData.append("moneda", this.formGrupBank.get("moneda")?.value)
+    formData.append("account_holder_name", this.formGrupBank.get("account_holder_name")?.value)
     if(!this.formCompany) {
       formData.append("logo", this.archivo)
       return this.saveEmpresa(formData)
@@ -137,6 +139,7 @@ export class FormCompanyComponent implements OnInit {
   updateEmpresa(formData: FormData) {
     // formData.append("logo", this.formCompany.logo)
     formData.append("publicId", this.formCompany.publicId)
+    formData.append("bankCuentaId", this.formCompany.bank_acount_id?.toString())
     if(this.isChangeImage) formData.append("logo", this.archivo)
     this.companyService.update(this.formCompany.company_id, formData)
     .subscribe({
@@ -167,15 +170,19 @@ export class FormCompanyComponent implements OnInit {
       instagram: this.formCompany.instagram,
       twitter:this.formCompany.twitter
     })
+    console.log("this.formCompany ", this.formCompany)
     this.formGrupBank?.setValue({
       bank: this.formCompany?.bank_name,
       num_cuenta: this.formCompany?.account_number,
-      cci: this.formCompany?.interbank_account_number,
-      moneda: this.formCompany.currency
+      cci: this.formCompany?.cci_number,
+      moneda: this.formCompany.currency,
+      account_holder_name: this.formCompany.account_holder_name
     })
     this.preview = this.formCompany.logo
     this.archivo = this.formCompany.logo
   }
+
+
   onArchivoCargado(event: any) {
     const archivos = event.addedFiles;
     this.mostrarImagen(archivos[0]); // Llama a la función para mostrar la imagen

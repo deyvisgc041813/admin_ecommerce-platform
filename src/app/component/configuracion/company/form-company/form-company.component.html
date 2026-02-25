@@ -212,6 +212,17 @@
             </div>
             <div class="col-md-6 mb-6">
               <div class="form-group">
+                <label for="exampleInputName">Nombre Titular</label>
+                <input type="text" formControlName="account_holder_name" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && bank.controls['account_holder_name'].errors }" id="account_holder_name"/>
+                  <div *ngIf="submitted && bank.controls['account_holder_name'].errors" class="invalid-feedback">
+                    <div *ngIf="bank.controls['account_holder_name'].errors?.['required']">Nombre titular de la cuenta es requerida</div>
+
+                  </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-6">
+              <div class="form-group">
                 <label for="exampleFormControlTextarea1"
                   >Seleccione Moneda</label
                 >
