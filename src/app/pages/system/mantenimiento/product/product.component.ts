@@ -32,14 +32,14 @@ export class ProductComponent implements OnInit{
     this.getTienda()
   }
   open() {
-    const modalRef = this.modalService.open(FormProductComponent, { ariaLabelledBy: 'modal-basic-title', size: 'lg'});
+    const modalRef = this.modalService.open(FormProductComponent, { ariaLabelledBy: 'modal-basic-title', size: 'xl'});
     modalRef.componentInstance.titulo = 'Crear Producto';
   }
   onSuccess (event: any) {
     this.productService.saveStatus(event)
   }
   isUpdate (event: any) {
-    const modalRef = this.modalService.open(FormProductComponent, { ariaLabelledBy: 'modal-basic-title', size: 'lg'});
+    const modalRef = this.modalService.open(FormProductComponent, { ariaLabelledBy: 'modal-basic-title', size: 'xl'});
     modalRef.componentInstance.titulo = 'Actualizar Producto';
     modalRef.componentInstance.formProduct  = event?.data as Producto;
   }

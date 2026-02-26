@@ -35,6 +35,7 @@
               bindLabel="name"
               placeholder="Seleccionar"
               [(ngModel)]="selectedSedeId"
+              (change)="loadProductsBySede($event?.store_id)"
               bindValue="store_id"
             >
             </ng-select>
@@ -389,6 +390,8 @@
                                 bindLabel="name"
                                 bindValue="id"
                                 formControlName="productId"
+                                [searchable]="true"
+                                [clearable]="true"
                                 (change)="onProductChange($event, i)"
                                 placeholder="Seleccionar"
                                 [ngClass]="{
@@ -503,41 +506,39 @@
                           </div>
                         </div>
                         <div class="col-md-6 mb-2">
-                          <div class="form-group">
-                            <label for="exampleFormControlTextarea1"
-                              >Seleccione Etiqueta</label
-                            >
-                            <ng-select
-                              [items]="promotionalPhrases"
-                              bindLabel="context"
-                              formControlName="etiqueta"
-                              placeholder="Seleccionar"
-                              bindValue="context"
-                              [ngClass]="{
-                                'is-invalid':
-                                  submitted &&
-                                  promForm?.get('etiqueta')?.invalid
-                              }"
-                            >
-                            </ng-select>
-                            <div
-                              *ngIf="
-                                submitted &&
-                                promForm?.get('etiqueta')?.invalid
-                              "
-                              class="invalid-feedback"
-                            >
-                              <div
-                                *ngIf="
-                                  promForm
-                                    ?.get('etiqueta')
-                                    ?.hasError('required')
-                                "
-                              >
-                                Etiqueta es obligatorio
+                        <div class="form-group">
+                          <label>Seleccione Etiqueta</label>
+
+                          <ng-select
+                            [items]="promotionalPhrases"
+                            bindLabel="context"
+                            formControlName="etiqueta"
+                            placeholder="Seleccionar etiqueta"
+                            [searchable]="true"
+                            [clearable]="true"
+                            (change)="onEtiquetaChange($event, i)"
+                            [ngClass]="{
+                              'is-invalid': submitted && promForm?.get('etiqueta')?.invalid
+                            }"
+                          >
+                             <ng-template ng-option-tmp let-item="item">
+                                     <div class="promo-badge-option">
+                                <i [class]="item.icon"></i>
+                                <span>{{ item.context }}</span>
                               </div>
+                               </ng-template>
+                          </ng-select>
+
+                          <!-- VALIDACIÓN -->
+                          <div
+                            *ngIf="submitted && promForm?.get('etiqueta')?.invalid"
+                            class="invalid-feedback d-block"
+                          >
+                            <div *ngIf="promForm?.get('etiqueta')?.hasError('required')">
+                              Etiqueta es obligatorio
                             </div>
                           </div>
+                        </div>
                         </div>
                         <div class="col-md-5 mb-3">
                           <div class="image-upload-container">

@@ -48,3 +48,43 @@
   border: 2px dashed #cbd5e1;
   border-radius: 10px;
 }
+
+
+// /* CONTENEDOR GENERAL */
+.ng-select .ng-select-container {
+  min-height: 42px;
+  border-radius: 8px;
+}
+
+/* OPCIONES DEL DROPDOWN */
+.promo-badge-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.promo-badge-option i {
+  font-size: 12px;
+}
+
+/* ITEM SELECCIONADO */
+.promo-badge-selected {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: white;
+}
+
+.promo-badge-selected i {
+  font-size: 12px;
+}
+

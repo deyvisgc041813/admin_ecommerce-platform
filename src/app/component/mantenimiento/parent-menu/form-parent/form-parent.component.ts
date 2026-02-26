@@ -161,24 +161,5 @@ export class FormParentComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  // onSelect(event: any) {
-  //   const file: File = event.addedFiles[0];
-  //   console.log(event);
-  //   if (!file) return;
 
-  //   const reader = new FileReader();
-
-  //   reader.onload = (e: any) => {
-  //     this.filePrincipal = {
-  //       file,
-  //       preview: e.target.result,
-  //     };
-  //   };
-
-  //   reader.readAsDataURL(file);
-  // }
-
-  // onRemove() {
-  //   this.filePrincipal = null;
-  // }
 }

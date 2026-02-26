@@ -31,10 +31,10 @@ export class SubcategoryService {
       category,
     );
   }
-  update(id: number, category: Category): Observable<ResponseMessage> {
+  update(id: number, subCate: SubCategory): Observable<ResponseMessage> {
     return this.http.put<ResponseMessage>(
       `${UriConstante.SUBCATEGORY_RESOURCE}/${id}`,
-      category,
+      subCate,
     );
   }
   delete(id: number) {

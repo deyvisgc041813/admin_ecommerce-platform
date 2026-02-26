@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -17,7 +17,6 @@ export class FormSubCategoryComponent implements OnInit {
   @Input() categoriaId: number = 0;
   @Input() formSubCategory: SubCategory
   @Input() parentMenuId: number = 0
-  idSubcategory: number = 0
   title: string = 'Crear Sub Categoria';
   formGrupSubCate: FormGroup = new FormGroup({});
   submitted: boolean = false
@@ -41,7 +40,7 @@ export class FormSubCategoryComponent implements OnInit {
     this.formGrupSubCate = this.formBuilder.group({
       subCategoria: this.formBuilder.array([]),
     });
-    if (this.idSubcategory > 0) {
+    if (this.formSubCategory) {
       this.setIdit()
     }
     this.tipoSubCategoria = DataDefault.SELECIONAR_TIPO_CATEGORIA_SUBCATEGORIA
@@ -81,8 +80,8 @@ export class FormSubCategoryComponent implements OnInit {
     if (this.formGrupSubCate.invalid) {
       return;
     }
-    const subCategorias = this.formGrupSubCate.value.subCategoria as SubCategory[];
-    if (this.idSubcategory === 0) {
+    const subCategorias =  this.formGrupSubCate.value.subCategoria as SubCategory[]
+    if (!this.formSubCategory) {
       this.subCategoryService.register(subCategorias).subscribe({
         next: (res: ResponseMessage) => {
           this.totastService.success(res?.message);
@@ -99,22 +98,23 @@ export class FormSubCategoryComponent implements OnInit {
         },
       })
     } else {
-      // this.subCategoryService.update(this.idSubcategory, this.subCategoria).subscribe({
-      //   next: (res: ResponseMessage) => {
-      //     this.totastService.success(res?.message);
-      //     this.formGrupSubCate.reset();
-      //     this.modalService.dismissAll();
-      //     this.subCategoryService.saveStatus(true)
-      //   },
-      //   error: (err: any) => {
-      //     this.totastService.error(err?.message);
-      //     console.log(err)
-      //     this.modalService.dismissAll();
-      //   },
-      //   complete: () => {
-      //     console.log("finis")
-      //   },
-      // })
+      const subCate = this.formGrupSubCate.value.subCategoria[0] as SubCategory
+      this.subCategoryService.update(this?.formSubCategory?.subcategory_id, subCate).subscribe({
+        next: (res: ResponseMessage) => {
+          this.totastService.success(res?.message);
+          this.formGrupSubCate.reset();
+          this.modalService.dismissAll();
+          this.subCategoryService.saveStatus(true)
+        },
+        error: (err: any) => {
+          this.totastService.error(err?.message);
+          console.log(err)
+          this.modalService.dismissAll();
+        },
+        complete: () => {
+          console.log("finis")
+        },
+      })
     }
     
   }
@@ -122,13 +122,12 @@ export class FormSubCategoryComponent implements OnInit {
     return this.formGrupSubCate;
   }
   setIdit () {
-    this.formGrupSubCate?.setValue({
-      category_name: this?.formSubCategory?.subcategory_name, 
-      category_id: this?.formSubCategory?.category_id,
-      type_sub_category: this?.formSubCategory?.type_sub_category,
-      // path: this?.formSubCategory?.path,
-    })
-    this.idSubcategory = this?.formSubCategory?.id || 0
+     const subCategoria = this.formBuilder.group({
+      subcategory_name: [this?.formSubCategory?.subcategory_name, Validators.required],
+      type_sub_category: [this?.formSubCategory?.type_sub_category, Validators.required],
+      category_id: [this?.formSubCategory?.category_id, Validators.required],
+    });
+    this.subCategoria.push(subCategoria);
   }
   getCategoria() {
     this.categoriaService.get().subscribe({

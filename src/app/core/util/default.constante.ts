@@ -229,6 +229,24 @@ export class DataDefault {
       descripcion: "Mostrar en Catálogo (Normal)", // PARA REALIZAR EL SUB MENU DE CADA SECCION DEL SISTEMA DEL ECOMERCE
     },
   ];
+public static readonly FRASES_PROMOCIONES = [
+  { context: "Oferta Especial", icon: "fas fa-tags" },
+  { context: "Ofertas Destacadas", icon: "fas fa-star" },
+  { context: "Ofertas Premium", icon: "fas fa-crown" },
+  { context: "Descuento Exclusivo", icon: "fas fa-gem" },
+  { context: "Promoción del Día", icon: "fas fa-fire" },
+  { context: "Precio Especial de Hoy", icon: "fas fa-clock" },
+  { context: "Oferta Relámpago", icon: "fas fa-bolt" },
+  { context: "Oportunidad Única", icon: "fas fa-gem" },
+  { context: "Descuento de Temporada", icon: "fas fa-tags" },
+  { context: "Edición Limitada", icon: "fas fa-hourglass-half" },
+  { context: "Oferta por Lanzamiento", icon: "fas fa-rocket" },
+  { context: "Solo por Tiempo Limitado", icon: "fas fa-stopwatch" },
+  { context: "¡Últimas Unidades Disponibles!", icon: "fas fa-box-open" },
+  { context: "Destacado", icon: "fas fa-fire" },
+  { context: "Nuevo", icon: "fas fa-plus-circle" },
+  { context: "Super Promoción", icon: "fas fa-fire" }
+];
   public static readonly TIPO_SERVICIO = [
     { value: "PAYMENT", label: "Pagos" },
     { value: "EMAIL", label: "Correos" },

@@ -10,7 +10,7 @@
       </span>
     </div> -->
     <form [formGroup]="formGrupSubCate" [ngClass]="subCategoria.length < 5 ? '' : 'scroll-form'">
-      <button type="button" class="btn btn-outline-success" (click)="agregarSubCategory()">Agregar Sub
+      <button *ngIf="!formSubCategory" type="button" class="btn btn-outline-success" (click)="agregarSubCategory()">Agregar Sub
         Categoria</button>
       <p></p>
       <div formArrayName="subCategoria" >
@@ -65,7 +65,7 @@
                 </div> -->
                 <div class="d-flex justify-content-center mb-1">
                   <div class="form-group">
-                    <button type="button" (click)="eliminar(i)" class="btn w-sm btn-sm btn-outline-danger"
+                    <button type="button" (click)="eliminar(i)" *ngIf="!formSubCategory" class="btn w-sm btn-sm btn-outline-danger"
                       style="margin-top: 25px">
                       <span><i class="fas fa-trash"></i></span>
                     </button>

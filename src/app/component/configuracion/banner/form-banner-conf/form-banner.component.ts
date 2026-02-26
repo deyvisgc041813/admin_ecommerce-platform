@@ -9,6 +9,7 @@ import { EcomerceService } from "@rdinvesiones/core/services/system/ecomerce.ser
 import { ToastrService } from "ngx-toastr";
 import {
   CompanyService,
+  DataDefault,
   ListPage,
   ProductoService,
   SedeService,
@@ -55,27 +56,7 @@ export class FormBannerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.promotionalPhrases = [
-      { context: "Oferta Especial" },
-      { context: "Oferetas Destacadas" },
-      { context: "Oferetas Premiun" },
-      { context: "Oferetas Premiun" },
-      { context: "Descuento Exclusivo" },
-      { context: "Promoción del Día" },
-      { context: "Precio Especial de Hoy" },
-      { context: "Oferta Relámpago" },
-      { context: "Oportunidad Única" },
-      { context: "Precio Reducido" },
-      { context: "Descuento de Temporada" },
-      { context: "Edición Limitada" },
-      { context: "Oferta por Lanzamiento" },
-      { context: "Solo por Tiempo Limitado" },
-      { context: "¡Últimas Unidades Disponibles!" },
-      { context: "Destacado" },
-      { context: "Nuevo" },
-      { context: "Super Promoción" },
-    ];
-    this.getProductos();
+    this.promotionalPhrases = DataDefault.FRASES_PROMOCIONES;
     this.getEmpresa();
     this.getSubCategoria();
     this.formBanner = this.formBuilder.group({
@@ -125,6 +106,12 @@ export class FormBannerComponent implements OnInit {
   }
 
   agregarPromociones() {
+    if (!this.selectedSedeId) {
+      this.totastService.warning(
+        "Debe seleccionar una compañía y una tienda antes de agregar promociones.",
+      );
+      return;
+    }
     if (this.promociones.length >= 5) {
       this.totastService.warning(
         "Solo puedes agregar máximo 3 promociones por operación",
@@ -133,6 +120,8 @@ export class FormBannerComponent implements OnInit {
     }
 
     const promociones = this.formBuilder.group({
+      icon: ["", Validators.required],
+      codProduct: ["", Validators.required],
       title: ["", Validators.required],
       productId: ["", Validators.required],
       etiqueta: ["", Validators.required],
@@ -162,14 +151,14 @@ export class FormBannerComponent implements OnInit {
       return;
     }
 
-    if (!this.banner || this.banner.length === 0) {
-      this.totastService.error("Debe agregar al menos un banner.");
-      return;
-    }
-    // Validar que todos los banners estén completos
-    if (!this.validateFormArray(this.banner, "Banner")) {
-      return;
-    }
+    // if (!this.banner || this.banner.length === 0) {
+    //   this.totastService.error("Debe agregar al menos un banner.");
+    //   return;
+    // }
+    // // Validar que todos los banners estén completos
+    // if (!this.validateFormArray(this.banner, "Banner")) {
+    //   return;
+    // }
     const formData = new FormData();
     formData.append("storeId", this.selectedSedeId.toString());
     formData.append("type", this.type);
@@ -182,21 +171,21 @@ export class FormBannerComponent implements OnInit {
       if (!this.validateFormArray(this.promociones, "Promoción")) {
         return;
       }
-      if (this.promociones.controls.length > 0) {
-        const principales = this.promociones.controls.filter(
-          (c) => c.get("promPrincipal")?.value === true,
-        );
-        if (principales.length === 0) {
-          this.totastService.error("Debe seleccionar una promoción principal.");
-          return;
-        }
-        if (principales.length > 1) {
-          this.totastService.error(
-            "Solo puede existir una promoción principal.",
-          );
-          return;
-        }
-      }
+      // if (this.promociones.controls.length === 3) {
+      //   const principales = this.promociones.controls.filter(
+      //     (c) => c.get("promPrincipal")?.value === true,
+      //   );
+      //   if (principales.length === 0) {
+      //     this.totastService.error("Debe seleccionar una promoción principal.");
+      //     return;
+      //   }
+      //   if (principales.length > 1) {
+      //     this.totastService.error(
+      //       "Solo puede existir una promoción principal.",
+      //     );
+      //     return;
+      //   }
+      // }
       const bannerData = this.banner.controls.map(
         (group: any, index: number) => {
           const file = group.get("image")?.value;
@@ -227,11 +216,14 @@ export class FormBannerComponent implements OnInit {
             title: group.value.title,
             etiqueta: group.value.etiqueta,
             precio: group.value.precio,
+            icon: group.value.icon,
+            codProduct: group.value.codProduct,
           };
         },
       );
       formData.append("banner", JSON.stringify(bannerData));
       formData.append("promociones", JSON.stringify(promoData));
+
       this.ecomerceService.saveBanner(formData).subscribe({
         next: (res) => {
           this.totastService.success(res?.message);
@@ -264,7 +256,9 @@ export class FormBannerComponent implements OnInit {
         formData.append("etiqueta", promo.etiqueta);
         formData.append("precio", promo.precio);
         formData.append("productId", promo.productId);
-        formData.append("promPrincipal", promo.promPrincipal);
+        //formData.append("promPrincipal", promo.promPrincipal);
+        formData.append("icon", promo.icon);
+        formData.append("codProduct", promo.codProduct);
         if (this.filePrincipalPromo[0]?.file) {
           formData.append("image", this.filePrincipalPromo[0].file);
           formData.append("publicId", this.bannerUpdate.public_id);
@@ -276,7 +270,7 @@ export class FormBannerComponent implements OnInit {
           next: (res) => {
             this.totastService.success(res?.message);
             this.ecomerceService.saveStatus(true);
-        
+
             this.formBanner.reset();
             this.submitted = false;
             this.modalService.dismissAll();
@@ -311,16 +305,7 @@ export class FormBannerComponent implements OnInit {
     group.get("image")?.markAsTouched();
     group.get("image")?.updateValueAndValidity();
   }
-  getProductos() {
-    this.productService.getNotPagineted().subscribe({
-      next: (res: any) => {
-        this.products = res;
-      },
-      error: (error: any) => {
-        console.log(error);
-      },
-    });
-  }
+
   getEmpresa() {
     this.companyService.get().subscribe({
       next: (res: ListPage) => {
@@ -354,10 +339,21 @@ export class FormBannerComponent implements OnInit {
       },
     });
   }
+  loadProductsBySede(sedeId: number) {
+    this.getProductos(sedeId);
+  }
+
   onProductChange(selected: any, index: number): void {
     this.promociones.at(index).patchValue({
       precio: selected.price || "",
       title: selected.name,
+      codProduct: selected.codeProduct
+    });
+  }
+  onEtiquetaChange(selected: any, index: number): void {
+    this.promociones.at(index).patchValue({
+      icon: selected.icon || "",
+      etiqueta: selected.context
     });
   }
   setIdit() {
@@ -366,6 +362,7 @@ export class FormBannerComponent implements OnInit {
     this.type = this?.bannerUpdate?.type;
     this.changeSede(this.selectedCompanyId);
     this.type = this.bannerUpdate?.type;
+
     if (this.type === "PRINCIPAL") {
       this.activeTab = 1;
       const banner = this.formBuilder.group({
@@ -388,17 +385,19 @@ export class FormBannerComponent implements OnInit {
       }
     } else {
       this.activeTab = 2;
+      this.loadProductsBySede(this.selectedSedeId)
       const promociones = this.formBuilder.group({
         title: [this?.bannerUpdate?.title || ""],
         productId: [this?.bannerUpdate?.product_id || ""],
         etiqueta: [this?.bannerUpdate?.etiqueta || ""],
         precio: [this?.bannerUpdate?.price || ""],
         promPrincipal: this?.bannerUpdate?.display_type === "CARD_LARGE",
+        icon: this?.bannerUpdate?.icon,
+        codProduct: this.bannerUpdate?.codProduct,
         image: [null],
       });
       this.promociones.clear();
       this.promociones.push(promociones);
-      console.log("this.promociones ", this.promociones);
       this.filePrincipalPromo = [];
       // si quieres mostrar imagen existente
       if (this?.bannerUpdate?.image_path) {
@@ -473,6 +472,16 @@ export class FormBannerComponent implements OnInit {
       if (i !== index) {
         control.get("promPrincipal")?.setValue(false, { emitEvent: false });
       }
+    });
+  }
+  getProductos(storeId: number) {
+    this.productService.getNotPagineted(storeId).subscribe({
+      next: (res: any) => {
+        this.products = res;
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
     });
   }
 }

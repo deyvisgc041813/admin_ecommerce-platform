@@ -21,8 +21,8 @@ export class ProductoService {
       .append('storeId', filter.storeId)
     return this.http.get(UriConstante.PRODUCT_RESOURCE + "/show-product", { params: params });
   }
-  getNotPagineted(): Observable<any> {
-    return this.http.get(UriConstante.PRODUCT_RESOURCE + "/not-paginated", { params: {} });
+  getNotPagineted(storeId:number): Observable<any> {
+    return this.http.get(`${UriConstante.PRODUCT_RESOURCE}/not-paginated/${storeId}`, { params: {} });
   }
   getAccesorio(companyId: number): Observable<Producto[]> {
     return this.http.get<ApiResponse<Producto[]>>(`${UriConstante.PRODUCT_RESOURCE}/accesorio-compania/${companyId}`)
