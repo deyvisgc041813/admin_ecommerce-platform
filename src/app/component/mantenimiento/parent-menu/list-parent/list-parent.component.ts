@@ -33,9 +33,6 @@ export class ListParentComponent implements OnInit {
   pageSize: number = 10;
   pageNumber: number = 1;
   list: ListPage;
-  tables$: Observable<ListPage[]>;
-  total$: Observable<number>;
-  tableData: ParentMenu[];
   filtros: FilterList = {
     page: 1,
     size: 10,

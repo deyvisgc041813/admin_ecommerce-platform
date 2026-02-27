@@ -189,6 +189,7 @@
                               bindLabel="context"
                               formControlName="etiqueta"
                               placeholder="Seleccionar"
+                              
                               bindValue="context"
                               [ngClass]="{
                                 'is-invalid':
@@ -227,28 +228,29 @@
                               formControlName="subCategoria"
                               placeholder="Seleccionar"
                               bindValue="subcategory_id"
+                              (change)="onSubCategoriaChange($event, i)"
                               [ngClass]="{
                                 'is-invalid':
                                   submitted &&
-                                  bannerForm?.get('etiqueta')?.invalid
+                                  bannerForm?.get('subCategoria')?.invalid
                               }"
                             >
                             </ng-select>
                             <div
                               *ngIf="
                                 submitted &&
-                                bannerForm?.get('etiqueta')?.invalid
+                                bannerForm?.get('subCategoria')?.invalid
                               "
                               class="invalid-feedback"
                             >
                               <div
                                 *ngIf="
                                   bannerForm
-                                    ?.get('etiqueta')
+                                    ?.get('subCategoria')
                                     ?.hasError('required')
                                 "
                               >
-                                Etiqueta es obligatorio
+                                Subcategoria es obligatorio
                               </div>
                             </div>
                           </div>

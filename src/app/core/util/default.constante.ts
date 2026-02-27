@@ -222,11 +222,11 @@ export class DataDefault {
   public static readonly SELECIONAR_TIPO_CATEGORIA_SUBCATEGORIA = [
     {
       val: "1",
-      descripcion: "Mostrar en Home (Promocional)", // PARA REALIZAR MENU PRINCIPAL DEL ECOMERCE
+      descripcion: "Menú principal", // "La categoría se mostrará en el menú principal del ecommerce."
     },
     {
       val: "2",
-      descripcion: "Mostrar en Catálogo (Normal)", // PARA REALIZAR EL SUB MENU DE CADA SECCION DEL SISTEMA DEL ECOMERCE
+      descripcion: "Catálogo", // La categoría se mostrará dentro del catálogo del ecommerce
     },
   ];
 public static readonly FRASES_PROMOCIONES = [

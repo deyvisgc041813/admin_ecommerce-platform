@@ -1,36 +1,51 @@
-import { DecimalPipe } from '@angular/common';
-import { Component, EventEmitter, Output, QueryList, ViewChildren } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
-import { Category, ListPage } from 'src/app/core';
-import { CategoryService } from 'src/app/core/services/system/category.service';
-import { AdvancedSortableDirective } from 'src/app/pages/tables/advancedtable/advanced-sortable.directive';
-import { AdvancedService } from 'src/app/pages/tables/advancedtable/advanced.service';
-import Swal from 'sweetalert2';
+import { DecimalPipe } from "@angular/common";
+import {
+  Component,
+  EventEmitter,
+  Output,
+  QueryList,
+  ViewChildren,
+} from "@angular/core";
+import { FilterList } from "@rdinvesiones/core/interface/general.interface";
+import { ToastrService } from "ngx-toastr";
+import { Category, ListPage } from "src/app/core";
+import { CategoryService } from "src/app/core/services/system/category.service";
+import { AdvancedSortableDirective } from "src/app/pages/tables/advancedtable/advanced-sortable.directive";
+import { AdvancedService } from "src/app/pages/tables/advancedtable/advanced.service";
+import Swal from "sweetalert2";
 @Component({
-  selector: 'app-list-category',
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss'],
-  providers: [AdvancedService, DecimalPipe]
+  selector: "app-list-category",
+  templateUrl: "./list.component.html",
+  styleUrls: ["./list.component.scss"],
+  providers: [AdvancedService, DecimalPipe],
 })
 export class ListCategoryComponent {
   @Output() update: EventEmitter<Object> = new EventEmitter<Object>();
-  @ViewChildren(AdvancedSortableDirective) headers: QueryList<AdvancedSortableDirective>;
-  categoria: Category
+  @ViewChildren(AdvancedSortableDirective)
+  headers: QueryList<AdvancedSortableDirective>;
+  categoria: Category;
   isCollapsed = true;
-  textSearch: string = ''
+  textSearch: string = "";
   totalElements: number = 0;
   pageSize: number = 10;
   pageNumber: number = 1;
-  list: ListPage
-  tables$: Observable<ListPage[]>;
-  total$: Observable<number>;
-  tableData: Category[];
-  constructor(private categoryService: CategoryService, private totastService: ToastrService, public service: AdvancedService) {
-  }
+  list: ListPage;
+  readonly STATUS_CONFIG: Record<number, { label: string; class: string }> = {
+  1: { label: 'Activo', class: 'bg-success' },
+  0: { label: 'Deshabilitado', class: 'bg-danger' }
+};
+  filtros: FilterList = {
+    page: 1,
+    size: 10,
+  };
+  constructor(
+    private categoryService: CategoryService,
+    private totastService: ToastrService,
+    public service: AdvancedService,
+  ) {}
   ngOnInit(): void {
-    this.listar();
-    this.obserbableOpertator()
+    this.fetchData();
+    this.obserbableOpertator();
   }
 
   clearFilter() {
@@ -48,39 +63,37 @@ export class ListCategoryComponent {
     // };
     // this.listar(this.pageNumber, this.pageSize);
   }
-  listar() {
+  fetchData() {
     this.categoryService.get().subscribe({
       next: (res: ListPage) => {
-        this.tables$ = res?.content
-        this.total$ = res?.content.length;
+        this.list = res;
+        this.totalElements = res.totalElements;
       },
       error: (err: any) => {
-      }
-    })
-    // this.productService.getAll(page - 1, size, this.filtros)
-    // .subscribe({
-    //   next: (res: ListPage) => {
-    //     this.list = res;
-    //     this.totalElements = res.totalElements;
-    //     this.pageNumber = res.number + 1;
-    //   },
-    //   error: (err: any) => {
-    //    console.log(err)
-    //   },
-    // })
+        this.totastService.error(err?.error?.error);
+      },
+    });
   }
   onPageChange(page: number): void {
     this.pageNumber = page;
-    this.listar();
+    this.fetchData();
   }
+  getCategoryTypeLabel(type: number | string): string {
+    const categoryTypes: Record<number, string> = {
+      1: "Menú Principal",
+      2: "Catálogo",
+    };
+    return categoryTypes[+type] || "No definido";
+  }
+
   edit(id: number) {
     this.categoryService.getById(id).subscribe({
       next: (res: Category) => {
         const response = {
-          opcion: 'edit',
-          data: res
-        }
-        this.update.emit(response)
+          opcion: "edit",
+          data: res,
+        };
+        this.update.emit(response);
       },
       error: (err: any) => {
         this.totastService.error(err?.error?.error);
@@ -90,54 +103,82 @@ export class ListCategoryComponent {
   obserbableOpertator() {
     this.categoryService.isRegisterOrUpdate$.subscribe({
       next: (res: boolean) => {
-        if (res) this.listar();
-      }
-    })
-  }
-  eliminar(id: number) {
-    // const swalWithBootstrapButtons = Swal.mixin({
-    //   customClass: {
-    //     confirmButton: 'btn btn-success',
-    //     cancelButton: 'btn btn-danger ms-2',
-    //   },
-    //   buttonsStyling: false,
-    // });
-    // swalWithBootstrapButtons
-    //   .fire({
-    //     title: 'Seguro de Eliminar Este Producto?',
-    //     text: `¡No podrás revertir esto!`,
-    //     icon: 'warning',
-    //     confirmButtonText: `Si, Eliminar!`,
-    //     cancelButtonText: 'No, cerrar!',
-    //     showCancelButton: true,
-    //   })
-    //   .then((result) => {
-    //     if (result.value) {
-    //       this.categoria.delete(id).subscribe({
-    //         next: (res: any) => {
-    //           this.totastService.success(res?.message);
-    //         },
-    //         error: (err: any) => {
-    //           this.totastService.error(err?.error);
-    //         },
-    //         complete: () => {
-    //           this.pageSize = 10;
-    //           this.pageNumber = 1;
-    //           this.listar(this.pageNumber, this.pageSize);
-    //         },
-    //       });
-    //     }
-    //   });
-  }
-  onSort({ column, direction }: any) {
-    // resetting other headers
-    this.headers.forEach(header => {
-      if (header.sortable !== column) {
-        header.direction = '';
-      }
+        if (res) this.fetchData();
+      },
     });
-    this.service.sortColumn = column;
-    this.service.sortDirection = direction;
   }
-
+  eliminar(id: number, publicId:string) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger ms-2',
+      },
+      buttonsStyling: false,
+    });
+    swalWithBootstrapButtons
+      .fire({
+        title: 'Seguro de Eliminar Esta categoria?',
+        text: `¡No podrás revertir esto!`,
+        icon: 'warning',
+        confirmButtonText: `Si, Eliminar!`,
+        cancelButtonText: 'No, cerrar!',
+        showCancelButton: true,
+      })
+      .then((result) => {
+        if (result.value) {
+          this.categoryService.delete(id, publicId).subscribe({
+            next: (res: any) => {
+              this.totastService.success(res?.message);
+            },
+            error: (err: any) => {
+              this.totastService.error(err?.error);
+            },
+            complete: () => {
+              this.pageSize = 10;
+              this.pageNumber = 1;
+              this.fetchData();
+            },
+          });
+        }
+      });
+  }
+  onPageSizeChange(size: number) {
+    this.filtros.size = size;
+    this.filtros.page = 1; // Reinicia a la primera página
+    this.fetchData();
+  }
+  actualizarEstado(id: string, estado: string) {
+    const messageEstado = estado === "1" ? "Desactivar" : "Habilitar";
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger ms-2",
+      },
+      buttonsStyling: false,
+    });
+    swalWithBootstrapButtons
+      .fire({
+        title: `Seguro de ${messageEstado} Este menu?`,
+        text: `¡No podrás revertir esto!`,
+        icon: "warning",
+        confirmButtonText: `Si, ${messageEstado}!`,
+        cancelButtonText: "No, cerrar!",
+        showCancelButton: true,
+      })
+      .then((result) => {
+        if (result.value) {
+          // this.categoryService.changeStatus(id, estado).subscribe({
+          //   next: (res: ResponseMessage) => {
+          //     this.totastService.success(res?.message);
+          //   },
+          //   error: (err: any) => {
+          //     this.totastService.error(err?.error);
+          //   },
+          //   complete: () => {
+          //     this.fetchData();
+          //   },
+          // });
+        }
+      });
+  }
 }

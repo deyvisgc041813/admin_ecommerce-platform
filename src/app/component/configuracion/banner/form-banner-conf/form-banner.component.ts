@@ -98,6 +98,7 @@ export class FormBannerComponent implements OnInit {
       title: ["", Validators.required],
       etiqueta: ["", Validators.required],
       subCategoria: ["", Validators.required],
+      pathSubCate: ["", Validators.required],
       descripcion: ["", Validators.required],
       precio: ["", Validators.required],
       image: [null, Validators.required],
@@ -151,14 +152,7 @@ export class FormBannerComponent implements OnInit {
       return;
     }
 
-    // if (!this.banner || this.banner.length === 0) {
-    //   this.totastService.error("Debe agregar al menos un banner.");
-    //   return;
-    // }
-    // // Validar que todos los banners estén completos
-    // if (!this.validateFormArray(this.banner, "Banner")) {
-    //   return;
-    // }
+
     const formData = new FormData();
     formData.append("storeId", this.selectedSedeId.toString());
     formData.append("type", this.type);
@@ -168,6 +162,14 @@ export class FormBannerComponent implements OnInit {
       //   return;
       // }
       // Validar que todas las promociones estén completas
+          // if (!this.banner || this.banner.length === 0) {
+    //   this.totastService.error("Debe agregar al menos un banner.");
+    //   return;
+    // }
+    // // Validar que todos los banners estén completos
+      if (!this.validateFormArray(this.banner, "Banner")) {
+        return;
+      }
       if (!this.validateFormArray(this.promociones, "Promoción")) {
         return;
       }
@@ -198,7 +200,7 @@ export class FormBannerComponent implements OnInit {
             subcategoryId: group.value.subCategoria,
             etiqueta: group.value.etiqueta,
             descripcion: group.value.descripcion,
-
+            pathSubCate: group.value.pathSubCate,
             precio: group.value.precio,
           };
         },
@@ -246,6 +248,7 @@ export class FormBannerComponent implements OnInit {
         formData.append("descripcion", banner.descripcion);
         formData.append("precio", banner.precio);
         formData.append("subcategoryId", banner.subCategoria);
+        formData.append("pathSubCate", banner.pathSubCate);
         if (this.filePrincipal[0]?.file) {
           formData.append("image", this.filePrincipal[0].file);
           formData.append("publicId", this.bannerUpdate.public_id);
@@ -350,6 +353,11 @@ export class FormBannerComponent implements OnInit {
       codProduct: selected.codeProduct
     });
   }
+  onSubCategoriaChange(selected: any, index: number): void {
+    this.banner.at(index).patchValue({
+      pathSubCate: selected.path || "",
+    });
+  }
   onEtiquetaChange(selected: any, index: number): void {
     this.promociones.at(index).patchValue({
       icon: selected.icon || "",
@@ -371,6 +379,7 @@ export class FormBannerComponent implements OnInit {
         descripcion: [this?.bannerUpdate?.description || ""],
         precio: [this?.bannerUpdate?.price || ""],
         subCategoria: [this?.bannerUpdate?.subcategory_id || ""],
+        pathSubCate: [this?.bannerUpdate?.sub_cate_path || ""],
         image: [null],
       });
       this.banner.clear();

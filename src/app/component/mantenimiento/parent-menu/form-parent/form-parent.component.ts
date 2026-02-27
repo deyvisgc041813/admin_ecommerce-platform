@@ -103,7 +103,8 @@ export class FormParentComponent implements OnInit {
       }
     }
     this.isLoading = true;
-    this.parentMenuService.save(formData, this.parentId).subscribe({
+    this.parentMenuService.save(formData, this.parentId)
+    .subscribe({
       next: (res) => {
         this.totastService.success(res?.message);
         this.modalService.dismissAll();
@@ -140,7 +141,13 @@ export class FormParentComponent implements OnInit {
       };
     }
   }
-
+  removeImage(index: number) {
+    this.filePrincipal[index] = null;
+    //const group = this.menus.at(index);
+    // group.get("image")?.setValue(null);
+    // group.get("image")?.markAsTouched();
+    // group.get("image")?.updateValueAndValidity();
+  }
   onSelect(event: any, index: number) {
     const file: File = event.addedFiles[0];
     if (!file) return;
