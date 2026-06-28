@@ -35,7 +35,7 @@ export class WhatsappComponent implements OnInit {
   products: Observable<any>;
   isIntervalo = 0;
   session = "";
-  sessionWhatsapp = "rydinversiones";
+  sessionWhatsapp = `rydinversiones`;
   sent = [];
   device = {
     session: "00000",
@@ -50,16 +50,14 @@ export class WhatsappComponent implements OnInit {
   };
   private statusUpdated = false;
   constructor(
-    private formBuilder: FormBuilder,
     public whatssapService: WhatssapService,
     private toastr: ToastrService,
-    private sanitizer: DomSanitizer,
     private tokenService: TokenService,
     private configurationService: ConfigurationsService,
   ) {
     this.KEY_SESSION_WHATSAPP = "session";
     const session = this.getStorageSession() as WhatssappConfig | null;
-    this.configWhatssap.sessionId = session?.sessionId ?? "rydinversiones";
+    this.configWhatssap.sessionId = session?.sessionId ?? this.sessionWhatsapp;
     this.configWhatssap.isConnect = session?.isConnect ?? false;
     if (!this.configWhatssap.isConnect) this.generateSession();
   }
@@ -68,6 +66,7 @@ export class WhatsappComponent implements OnInit {
     this.whatssapService.listen(this.configWhatssap.sessionId);
     this.getObtenerQr();
     this.getStatusConnect();
+
   }
 
 
@@ -99,7 +98,7 @@ export class WhatsappComponent implements OnInit {
         this.configWhatssap.isConnect = true;
         this.updateConnectWhatsapp(EESTADO.ACTIVE, this.configWhatssap.sessionId)
         this.statusUpdated = true
-      } else if (status === "closed") { //|| status === "waiting_qr"
+      } else if (status === "closed") {
         this.configWhatssap.isConnect = false;
         this.statusUpdated = false
         this.updateConnectWhatsapp(EESTADO.INACTIVE, this.configWhatssap.sessionId)
@@ -133,7 +132,8 @@ export class WhatsappComponent implements OnInit {
   updateSessionWhatsapp(session:string) {
     const data = this.tokenService.decodeToken();
     const companyId = data?.user?.company_id ?? data?.company_id;
-    return this.configurationService.updateSessionWhatsapp(companyId, session).subscribe({
+    return this.configurationService.updateSessionWhatsapp(companyId, session)
+    .subscribe({
       next: (res: any) => {
         this.toastr.success(res.message, "Exito!");
       },
@@ -147,7 +147,6 @@ export class WhatsappComponent implements OnInit {
     generateSession() {
     const request: WhatssapssRequest = {
       sessionId: this.sessionWhatsapp,
-      //number: this.formGrup.value.celular.replace(/\s/g, "")
     };
     this.whatssapService.generate(request).subscribe(
       (res) => {
@@ -155,7 +154,6 @@ export class WhatsappComponent implements OnInit {
           this.toastr.success(res.message, "Exito!");
           this.addStorageSession();
           this.updateSessionWhatsapp(request.sessionId)
-          //this.qrBase64 = this.sanitizer.bypassSecurityTrustResourceUrl(`${res.data.qr}`);
         } else {
           console.log("res ", res);
           this.toastr.error(res.message, "Error!");
